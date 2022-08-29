@@ -296,7 +296,7 @@ def import2 (request):
     return render(request,'import2.html',context)
 
 
-def import22 (request):
+def import222 (request):
     os.environ.setdefault('DJANGO_SETTINGS_MODULE','first_project.settings')
     from django import setup
     setup()
