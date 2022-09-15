@@ -8,4 +8,4 @@ setup()
 
 from first_app.models import AnkenList
 
-AnkenList.objects.filter(ankenMei='レンタルPC月額費用　4月',id=2).delete()
+AnkenList.objects.filter(ankenMei='LCM').delete()

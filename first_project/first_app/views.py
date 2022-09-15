@@ -4,6 +4,8 @@ from re import I
 from unittest.mock import NonCallableMock
 from django.shortcuts import render
 from django.http import HttpResponse
+from  .import forms
+from django.forms import formset_factory
 
 import sqlite3
 import openpyxl
@@ -95,39 +97,52 @@ def export2 (request):
             sheet['J1'].value = '取引先コード'
             sheet['K1'].value = '取引先名'
             sheet['L1'].value = '勘定科目'
-            sheet['M1'].value = '計画単価A'
-            sheet['N1'].value = '計画数B'
-            sheet['O1'].value = '計画合計金額　税込C=A×B'
-            sheet['P1'].value = '見積単価D'
-            sheet['Q1'].value = '見積数E'
-            sheet['R1'].value = '見積合計金額　税込F=D×E'
+            sheet['M1'].value = '計画単価'
+            sheet['N1'].value = '計画数'
+            sheet['O1'].value = '計画合計金額'
+            sheet['P1'].value = '見積単価'
+            sheet['Q1'].value = '見積数'
+            sheet['R1'].value = '見積合計金額'
             sheet['S1'].value = '見積書リンク'
-            sheet['T1'].value = 'wfNo'
-            sheet['U1'].value = '契約金額'
-            sheet['V1'].value = '注文単価G'
-            sheet['W1'].value = '注文数H'
-            sheet['X1'].value = '注文合計金額　税込I=G×H'
-            sheet['Y1'].value = '注文書リンク'
-            sheet['Z1'].value = '納品単価J'
-            sheet['AA1'].value = '納品数K'
-            sheet['AB1'].value = '納品合計金額　税込L=J×K'
-            sheet['AC1'].value = '支払単価M'
-            sheet['AD1'].value = '購入数N'
-            sheet['AE1'].value = '購入合計金額　税込O=M×N'
-            sheet['AF1'].value = '請求書リンク'
-            sheet['AG1'].value = '計画－実績　G=C-O'
-            sheet['AH1'].value = '納品日期限'
-            sheet['AI1'].value = '検収日期限'
-            sheet['AJ1'].value = '支払日期限'
-            sheet['AK1'].value = '支払繰返し期限'
-            sheet['AL1'].value = '関連稟議書'
-            sheet['AM1'].value = '契約書'
-            sheet['AN1'].value = '購入会社'
-            sheet['AO1'].value = '最終データ更新日'
-            sheet['AP1'].value = '最終更新者'
-            sheet['AQ1'].value = '社員番号'
-            sheet['AR1'].value = '担当者名'
-            sheet['AS1'].value = 'コメント'
+            sheet['T1'].value = '稟議書単価'
+            sheet['U1'].value = '稟議書数'
+            sheet['V1'].value = '稟議書合計'
+            sheet['W1'].value = '稟議書No.'
+            sheet['X1'].value = '稟議書リンク'
+            sheet['Y1'].value = 'ワークフローNo.'
+            sheet['Z1'].value = '契約金額'
+            sheet['AA1'].value = '契約書No.'
+            sheet['AB1'].value = '契約書リンク'
+            sheet['AC1'].value = '押捺稟議No.'
+            sheet['AD1'].value = '押捺稟議リンク'
+            sheet['AE1'].value = '注文単価'
+            sheet['AF1'].value = '注文数'
+            sheet['AG1'].value = '注文合計金額'
+            sheet['AH1'].value = '注文書リンク'
+            sheet['AI1'].value = '納品日期限'
+            sheet['AJ1'].value = '検収日期限'
+            sheet['AK1'].value = '支払日期限'
+            sheet['AL1'].value = '納品単価'
+            sheet['AM1'].value = '納品数'
+            sheet['AN1'].value = '納品合計金額'
+            sheet['AO1'].value = '納品書リンク'
+            sheet['AP1'].value = '支払単価'
+            sheet['AQ1'].value = '購入数'
+            sheet['AR1'].value = '購入合計金額'
+            sheet['AS1'].value = '請求書リンク情報'
+            sheet['AT1'].value = '計画－実績'
+            sheet['AU1'].value = '支払繰返し期限'
+            sheet['AV1'].value = '購入会社'
+            sheet['AW1'].value = '最終データ更新日'
+            sheet['AX1'].value = '最終更新者'
+            sheet['AY1'].value = '社員番号'
+            sheet['AZ1'].value = '担当者名'
+            sheet['BA1'].value = 'コメント'
+            sheet['BB1'].value = '表示順'
+
+
+
+
 
 
             db = sqlite3.connect('db.sqlite3')
@@ -179,6 +194,17 @@ def export2 (request):
                 sheet['AQ' + str(i+2)].value = row[42]
                 sheet['AR' + str(i+2)].value = row[43]
                 sheet['AS' + str(i+2)].value = row[44]
+                sheet['AT' + str(i+2)].value = row[45]
+                sheet['AU' + str(i+2)].value = row[46]
+                sheet['AV' + str(i+2)].value = row[47]
+                sheet['AW' + str(i+2)].value = row[48]
+                sheet['AX' + str(i+2)].value = row[49]
+                sheet['AY' + str(i+2)].value = row[50]
+                sheet['AZ' + str(i+2)].value = row[51]
+                sheet['BA' + str(i+2)].value = row[52]
+                sheet['BB' + str(i+2)].value = row[53]
+
+
             c.close()
             workbook.save(inputFile) 
  
@@ -227,50 +253,60 @@ def import2 (request):
                     kanriNo= row[6].value,
                     edaban= row[7].value,
                     defaults={
-                        "keiriShonin": row[1].value,              
-                        "statusCord": row[2].value,
-                        "status":  row[3].value,
-                        "edabanGroup":  row[4].value,
-                        "shiharaiPattern":  row[5].value,
-                        "kanriNo": row[6].value,
-                        "edaban": row[7].value,
-                        "ankenMei":  row[8].value,
-                        "torihikisakiCode":  row[9].value,
-                        "torihikisakiMei":  row[10].value,
-                        "kanjokamoku":  row[11].value,
-                        "keikakuTanka":  row[12].value,
-                        "keikakuSuu":  row[13].value,
-                        "keikakuGokei":  row[14].value,
-                        "mitsumoriTanka":  row[15].value,
-                        "mitsumoriSuu":  row[16].value,
-                        "mitsumoriGokei":  row[17].value,
-                        "mtsumoriLink":  row[18].value,
-                        "wfNo":  row[19].value,
-                        "keiyakuKingaku":  row[20].value,
-                        "chumonTanka":  row[21].value,
-                        "chumonSuu":  row[22].value,
-                        "chumonGokei":  row[23].value,
-                        "chumonLink":  row[24].value,
-                        "nohinTanka":  row[25].value,
-                        "nohinSuu":  row[26].value,
-                        "nohinGokei":  row[27].value,
-                        "shiharaiTanka":  row[28].value,
-                        "konyuSuu":  row[29].value,
-                        "konyuGokei":  row[30].value,
-                        "seikyushoLink":  row[31].value,
-                        "keikaku_Jisseki":  row[32].value,
-                        "nohinKigen":  row[33].value,
-                        "kenshuKigen":  row[34].value,
-                        "shiharaiKigen":  row[35].value,
-                        "kurikaeshiKigen":  row[36].value,
-                        "ringishoLink":  row[37].value,
-                        "keiyakushoLink":  row[38].value,
-                        "konyuKaisha":  row[39].value,
-                        "dataKoshinbi":  row[40].value,
-                        "saishuKoshinsha":  row[41].value,
-                        "shainNo":  row[42].value,
-                        "tantosha":  row[43].value,
-                        "comment":  row[44].value,
+                        "keiriShonin" : row[1].value,
+                        "statusCode" : row[2].value,
+                        "status" : row[3].value,
+                        "edabanGroup" : row[4].value,
+                        "shiharaiPattern" : row[5].value,
+                        "kanriNo" : row[6].value,
+                        "edaban" : row[7].value,
+                        "ankenMei" : row[8].value,
+                        "torihikisakiCode" : row[9].value,
+                        "torihikisakiMei" : row[10].value,
+                        "kanjokamoku" : row[11].value,
+                        "keikakuTanka" : row[12].value,
+                        "keikakuSuu" : row[13].value,
+                        "keikakuGokei" : row[14].value,
+                        "mitsumoriTanka" : row[15].value,
+                        "mitsumoriSuu" : row[16].value,
+                        "mitsumoriGokei" : row[17].value,
+                        "mitsumoriLink" : row[18].value,
+                        "ringiTanka" : row[19].value,
+                        "ringiSuu" : row[20].value,
+                        "ringiGokei" : row[21].value,
+                        "ringishoNo" : row[22].value,
+                        "ringishoLink" : row[23].value,
+                        "wfNo" : row[24].value,
+                        "keiyakuKingaku" : row[25].value,
+                        "keiyakushoNo" : row[26].value,
+                        "keiyakushoLink" : row[27].value,
+                        "onatsuRingiNo" : row[28].value,
+                        "onatsuRingiLink" : row[29].value,
+                        "chumonTanka" : row[30].value,
+                        "chumonSuu" : row[31].value,
+                        "chumonGokei" : row[32].value,
+                        "chumonLink" : row[33].value,
+                        "nohinKigen" : row[34].value,
+                        "kenshuKigen" : row[35].value,
+                        "shiharaiKigen" : row[36].value,
+                        "nohinTanka" : row[37].value,
+                        "nohinSuu" : row[38].value,
+                        "nohinGokei" : row[39].value,
+                        "nohinLink" : row[40].value,
+                        "shiharaiTanka" : row[41].value,
+                        "konyuSuu" : row[42].value,
+                        "konyuGokei" : row[43].value,
+                        "seikyushoLink" : row[44].value,
+                        "keikaku_Jisseki" : row[45].value,
+                        "kurikaeshiKigen" : row[46].value,
+                        "konyuKaisha" : row[47].value,
+                        "dataKoshinbi" : row[48].value,
+                        "saishuKoshinsha" : row[49].value,
+                        "shainNo" : row[50].value,
+                        "tantosha" : row[51].value,
+                        "comment" : row[52].value,
+                        "hyojijun" : row[53].value,
+
                     }    
                 )
                 
@@ -294,131 +330,6 @@ def import2 (request):
              
           
     return render(request,'import2.html',context)
-
-
-def import222 (request):
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE','first_project.settings')
-    from django import setup
-    setup()
-    
-    inputFile=request.POST.get('inputFile')
-    # print('インプットファイルは',inputFile)
-    
-    # if request.method == "POST":
-        # if "inputFile" in request.POST:
-             
-    workbook = openpyxl.load_workbook(inputFile)
-    sheet = workbook.active
-    it = sheet.iter_rows(min_row=2)
-    ids = []
-    
-    for row in it:
-        ids.append(row[0].value)
-        # a = AnkenList(
-        
-        #     keiriShonin= True,
-        #     statusCord= 0,
-        #     status= '案件入力（作成中）',
-        #     edabanGroup= 3,
-        #     shiharaiPattern= 3,
-        #     kanriNo= 'S22-010',
-        #     edaban= '1',
-        #     ankenMei= 'Office365 月額費用　4月',
-        #     saishuKoshinsha= '荒木',
-        #     shainNo= 17059,
-        #     tantosha= '荒木',
-        #     comment= '・・・・'
-        # )
-
-        # a.save(force_insert=True)    
-        
-        
-        # print('IDの値は',row[0].value)
-    
-        ankn, created=AnkenList.objects.update_or_create (    
-            kanriNo= row[6].value,
-            edaban= row[7].value,
-            defaults={
-                "keiriShonin": row[1].value,              
-                "statusCord": row[2].value,
-                "status":  row[3].value,
-                "edabanGroup":  row[4].value,
-                "shiharaiPattern":  row[5].value,
-                "kanriNo": row[6].value,
-                "edaban": row[7].value,
-                "ankenMei":  row[8].value,
-                "torihikisakiCode":  row[9].value,
-                "torihikisakiMei":  row[10].value,
-                "kanjokamoku":  row[11].value,
-                "keikakuTanka":  row[12].value,
-                "keikakuSuu":  row[13].value,
-                "keikakuGokei":  row[14].value,
-                "mitsumoriTanka":  row[15].value,
-                "mitsumoriSuu":  row[16].value,
-                "mitsumoriGokei":  row[17].value,
-                "mtsumoriLink":  row[18].value,
-                "wfNo":  row[19].value,
-                "keiyakuKingaku":  row[20].value,
-                "chumonTanka":  row[21].value,
-                "chumonSuu":  row[22].value,
-                "chumonGokei":  row[23].value,
-                "chumonLink":  row[24].value,
-                "nohinTanka":  row[25].value,
-                "nohinSuu":  row[26].value,
-                "nohinGokei":  row[27].value,
-                "shiharaiTanka":  row[28].value,
-                "konyuSuu":  row[29].value,
-                "konyuGokei":  row[30].value,
-                "seikyushoLink":  row[31].value,
-                "keikaku_Jisseki":  row[32].value,
-                "nohinKigen":  row[33].value,
-                "kenshuKigen":  row[34].value,
-                "shiharaiKigen":  row[35].value,
-                "kurikaeshiKigen":  row[36].value,
-                "ringishoLink":  row[37].value,
-                "keiyakushoLink":  row[38].value,
-                "konyuKaisha":  row[39].value,
-                "dataKoshinbi":  row[40].value,
-                "saishuKoshinsha":  row[41].value,
-                "shainNo":  row[42].value,
-                "tantosha":  row[43].value,
-                "comment":  row[44].value,
-                
-                
-                
-                
-                
-                
-                
-            }    
-        )
-        
-        # if created:
-        #     print('データ作成', ankn)
-        # else:
-        #     print('データ更新', ankn)
-        
-
-    ankenList=AnkenList.objects.all()   
-    for anken in ankenList:
-        hantei=0
-        for idss in ids:
-            if anken.id==idss:
-                hantei=1
-        if hantei==0:
-            AnkenList.objects.filter(id=anken.id).delete()                          
-                    
-                
-                    
-
-    context = {
-        'ankenList' : AnkenList.objects.all(),
-        'inputFile' : inputFile
-    }            
-             
-          
-    return render(request,'import2.html',context)
-
 
 
 def importTest (request):
@@ -447,3 +358,45 @@ def importTest (request):
         
     }
     return render(request,'import2.html',context)
+
+
+def edit(request):
+    form = forms.formAnkenList()
+    # a=AnkenList.objects.all().count()
+    # TestFormset = formset_factory(forms.formAnkenList)
+    # formset = TestFormset(request.POST or None)
+    # print("ふぉーむせっとは",formset)
+    # if formset.is_valid():
+    #     formset.save()
+        
+        # for form in formset:
+        #     print(form.cleaned_data)
+        
+    return render(
+        request,'edit.html',context={'form':form,'ankenList' : AnkenList.objects.all()}
+    )
+    
+def edit2(request):
+    form = forms.formAnkenList()
+    if request.method == 'POST':
+        form = forms.formAnkenList(request.POST)
+        
+    return render(
+        request,'edit2.html',context={'form':form,'ankenList' : AnkenList.objects.all()}
+    )
+    
+    
+def edit3(request):
+    form = forms.formAnkenList()
+    print("リクエストメソッドは",request.method)
+    print("リクエストポストは",request.POST)
+    if request.method == 'POST':
+        form = forms.formAnkenList(request.POST)
+        print("ふぉーむは",form)
+        if form.is_valid():
+            form.save()
+            # print("ふぉーむせっとは",form.cleaned_data)          
+           
+    return render(
+        request,'edit3.html',context={'form':form,'ankenList' : AnkenList.objects.all()}
+    )    
