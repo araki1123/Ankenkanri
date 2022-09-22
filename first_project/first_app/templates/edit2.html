@@ -17,53 +17,168 @@
         <div class="card-header"><div class="p-3 mb-2 bg-info text-white"><h3>個別データ編集</h3>
         </div>
     </div>
-</div>
-<p>編集内容を上書きしますか？</p>
-<p>編集内容をコピーしますか？</p>
-<p>編集内容を削除しますか？</p>
 
-        {% comment %} <h2><font color="blue">案件管理システム &emsp;&emsp;メインメニュー </font></h2> {% endcomment %}
+
+{% if checkType == 'kanrishori' %}
+<p>「管理No.を入力して処理」画面へ移行しますか？</p>
+{%elif checkType == 'henko'%}
+<p>編集内容を上書きしますか？</p>
+{%elif checkType == 'hukusha'%}
+<p>編集内容をコピーしますか？</p>
+{%elif checkType == 'sakujo'%}
+<p>編集内容を削除しますか？</p>
+{%endif%}
     
    
-    {% comment %} <form action="{% url 'first_app.views.aaaa' %}" method="post"> {% endcomment %}
-        {% comment %} {% csrf_token %} {% endcomment %}
-    {% comment %}  <div class="d-grid gap-2 d-md-block justify-content-center">
-        <input type="submit" name="button_1" class="btn btn-info w-auto" style="width: 90%;height : 60px; padding: 10px;margin: 10px;" value="検索して処理<br>&emsp;　"> 
-        <input type="submit" name="button_2" class="btn btn-info w-auto" style="width: 90%;height : 60px; padding: 10px;margin: 10px;" value="管理No.入力して処理<br>&emsp;　"> 
-        <input type="submit" name="button_3" class="btn btn-info w-auto" style="width: 90%;height : 60px; padding: 10px;margin: 10px;" value="データインポート<br>&emsp;　"> 
-        <input type="submit" name="button_4" class="btn btn-info w-auto" style="width: 90%;height : 60px; padding: 10px;margin: 10px;" value="データエクスポート<br>&emsp;　">  {% endcomment %}
         
 <div style="margin: 15px 15px; ">
         {% comment %} <div class="d-grid gap-2 d-md-block justify-content-center"> {% endcomment %}
-        <a  class="btn btn-primary" href="edit3" type="submit" style="width:135pt;height:45pt;margin: 5px 5px;">確定</a>{% comment %} <a  class="btn btn-primary" href="index" type="submit" style="width:135pt;height:45pt;margin: 5px 5px;">確定</a> {% endcomment %}
+        {% comment %} <a  class="btn btn-primary" href="edit3" type="submit" style="width:135pt;height:45pt;margin: 5px 5px;">確定</a><a  class="btn btn-primary" href="index" type="submit" style="width:135pt;height:45pt;margin: 5px 5px;">確定</a> {% endcomment %}
         <a  class="btn btn-primary" href="index" type="submit" style="width:135pt;height:45pt;margin: 5px 5px;">TOPへ戻る</a>
 
 </div>
     
     <body>
-        <div class="card-header">
-        <div class="p-3 mb-2 bg-info text-white">
-        <form method="POST">
+        {% comment %} <div class="card-header"> {% endcomment %}
+        {% comment %} <div class="p-3 mb-2 bg-info text-white"> {% endcomment %}
+        <form action="edit3" method='POST' >
+            
         {% csrf_token %}
+        <div style="height:290px; width:1280px; overflow:scroll" class="anken-table">
         <table>    
-        {{form.as_table}}
-        </table>
-        </div>
-        </div>
+        {% comment %} {{form.as_table}} {% endcomment %}
+        
+        <tr>
 
-
+            <th norat>id</th>
+            <th norat>経理承認</th>
+            <th norat>ステータスコード</th>
+            <th norat>案件ステータス</th>
+            <th norat>枝番グループ</th>
+            <th norat>支払パターン</th>
+            <th norat>管理No.</th>
+            <th norat>枝番</th>
+            <th norat>案件名</th>
+            <th norat>取引先コード</th>
+            <th norat>取引先名</th>
+            <th norat>勘定科目</th>
+            <th norat>計画単価</th>
+            <th norat>計画数</th>
+            <th norat>計画合計金額</th>
+            <th norat>見積単価</th>
+            <th norat>見積数</th>
+            <th norat>見積合計金額</th>
+            <th norat>見積書リンク</th>
+            <th norat>稟議書単価</th>
+            <th norat>稟議書数</th>
+            <th norat>稟議書合計</th>
+            <th norat>稟議書No.</th>
+            <th norat>稟議書リンク</th>
+            <th norat>ワークフローNo.</th>
+            <th norat>契約金額</th>
+            <th norat>契約書No.</th>
+            <th norat>契約書リンク</th>
+            <th norat>押捺稟議No.</th>
+            <th norat>押捺稟議リンク</th>
+            <th norat>注文単価</th>
+            <th norat>注文数</th>
+            <th norat>注文合計金額</th>
+            <th norat>注文書リンク</th>
+            <th norat>納品日期限</th>
+            <th norat>検収日期限</th>
+            <th norat>支払日期限</th>
+            <th norat>納品単価</th>
+            <th norat>納品数</th>
+            <th norat>納品合計金額</th>
+            <th norat>納品書リンク</th>
+            <th norat>支払単価</th>
+            <th norat>購入数</th>
+            <th norat>購入合計金額</th>
+            <th norat>請求書リンク情報</th>
+            <th norat>計画－実績</th>
+            <th norat>支払繰返し期限</th>
+            <th norat>購入会社</th>
+            <th norat>最終データ更新日</th>
+            <th norat>最終更新者</th>
+            <th norat>社員番号</th>
+            <th norat>担当者名</th>
+            <th norat>コメント</th>
+            <th norat>表示順</th>
+        </tr>
+        <tr>
+            
+            <th norat>{{form.id }}</th>
+            <td norat >{{form.keiriShonin}}</td>
+            <td norat >{{form.statusCode}}</td>
+            <td norat>{{form.status}}</td>
+            <td norat>{{form.edabanGroup}}</td>
+            <td norat>{{form.shiharaiPattern}}</td>
+            <td norat>{{form.kanriNo}}</td>
+            <td norat>{{form.edaban}}</td>
+            <td norat>{{form.ankenMei}}</td>
+            <td norat>{{form.torihikisakiCode}}</td>
+            <td norat>{{form.torihikisakiMei}}</td>
+            <td norat>{{form.kanjokamoku}}</td>
+            <td norat>{{form.keikakuTanka}}</td>
+            <td norat>{{form.keikakuSuu}}</td>
+            <td norat>{{form.keikakuGokei}}</td>
+            <td norat>{{form.mitsumoriTanka}}</td>
+            <td norat>{{form.mitsumoriSuu}}</td>
+            <td norat>{{form.mitsumoriGokei}}</td>
+            <td norat>{{form.mitsumoriLink}}</td>
+            <td norat>{{form.ringiTanka}}</td>
+            <td norat>{{form.ringiSuu}}</td>
+            <td norat>{{form.ringiGokei}}</td>
+            <td norat>{{form.ringishoNo}}</td>
+            <td norat>{{form.ringishoLink}}</td>
+            <td norat>{{form.wfNo}}</td>
+            <td norat>{{form.keiyakuKingaku}}</td>
+            <td norat>{{form.keiyakushoNo}}</td>
+            <td norat>{{form.keiyakushoLink}}</td>
+            <td norat>{{form.onatsuRingiNo}}</td>
+            <td norat>{{form.onatsuRingiLink}}</td>
+            <td norat>{{form.chumonTanka}}</td>
+            <td norat>{{form.chumonSuu}}</td>
+            <td norat>{{form.chumonGokei}}</td>
+            <td norat>{{form.chumonLink}}</td>
+            <td norat>{{form.nohinKigen}}</td>
+            <td norat>{{form.kenshuKigen}}</td>
+            <td norat>{{form.shiharaiKigen}}</td>
+            <td norat>{{form.nohinTanka}}</td>
+            <td norat>{{form.nohinSuu}}</td>
+            <td norat>{{form.nohinGokei}}</td>
+            <td norat>{{form.nohinLink}}</td>
+            <td norat>{{form.shiharaiTanka}}</td>
+            <td norat>{{form.konyuSuu}}</td>
+            <td norat>{{form.konyuGokei}}</td>
+            <td norat>{{form.seikyushoLink}}</td>
+            <td norat>{{form.keikaku_Jisseki}}</td>
+            <td norat>{{form.kurikaeshiKigen}}</td>
+            <td norat>{{form.konyuKaisha}}</td>
+            <td norat>{{form.dataKoshinbi}}</td>
+            <td norat>{{form.saishuKoshinsha}}</td>
+            <td norat>{{form.shainNo}}</td>
+            <td norat>{{form.tantosha}}</td>
+            <td norat>{{form.comment}}</td>
+            <td norat>{{form.hyojijun}}</td>
+            
+            
+        </tr>
+        
         
 
 
+        </table>
+        
+    
+    </div>
+    
+        {% comment %} <input type = "submit" value = "確定" class="btn btn-primary" onclick="location.href='edit3' {{checkType}}"> {% endcomment %}
+        <input type = "hidden" name="checkType" value= {{checkType}}>
+        <input type = "submit" value = "確定" class="btn btn-primary" href="{% url 'first_app:edit3'%}">
 
-
-
-
-
-
-
-
+    </form>
+    {% comment %} <a href="{% url 'first_app:edit3' name='araki'%}" >home</a> {% endcomment %}
+</div>
 </body>
-
-
 </html>

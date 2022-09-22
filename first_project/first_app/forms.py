@@ -65,3 +65,8 @@ class formAnkenList(forms.ModelForm):
     class Meta:
         model = AnkenList
         fields = '__all__'
+
+    # def __init__(self,*args,**kwargs):
+    #     self.request = kwargs.pop("request")
+    #     super (formAnkenList,self).__init__(*args,**kwargs)
+        

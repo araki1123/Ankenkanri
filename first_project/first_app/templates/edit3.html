@@ -21,7 +21,15 @@
 <div class="commentandbutton">
     <table>
         <tr>
-        <td>データ更新が完了しました &emsp;&emsp;&emsp;&emsp;</td>
+        {% if checkType == 'kanrishori'%}
+        <td> 管理No.を入力して処理画面へ</td>
+        {% elif checkType == 'henko'%}
+        <td>データの変更が完了しました &emsp;&emsp;&emsp;&emsp;</td>
+        {% elif checkType == 'hukusha'%}
+        <td>データのコピーが完了しました &emsp;&emsp;&emsp;&emsp;</td>
+        {% elif checkType == 'sakujo'%}
+        <td>データの削除が完了しました &emsp;&emsp;&emsp;&emsp;</td>
+        {% endif %}
         <td><button onclick="location.href='index'" class="btn btn-primary" type="submit" style="width:100pt;height:30pt;margin: 5px 5px;">TOPへ戻る</button></td>
         </tr>
         </table>

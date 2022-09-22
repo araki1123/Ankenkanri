@@ -8,4 +8,4 @@ setup()
 
 from first_app.models import AnkenList
 
-AnkenList.objects.filter(ankenMei='LCM').delete()
+AnkenList.objects.filter(id=31).delete()
