@@ -5,8 +5,11 @@ from re import I
 from unittest.mock import NonCallableMock
 from django.shortcuts import render
 from django.http import HttpResponse
-from  .import forms
+from .import forms
 from django.forms import formset_factory
+from django.utils import timezone
+from django.contrib.auth.models import User
+import datetime
 
 import sqlite3
 import openpyxl
@@ -14,6 +17,9 @@ import os
 # from numpy import true_divide
 # from django import setup
 from .models import AnkenList
+from .models import AnkenStatus
+from .models import AnkenTorihikisaki
+from .models import AnkenTantosha
 
 # Create your views here.
 
@@ -25,26 +31,93 @@ def maxEdaban(kanriNo):
     anken = AnkenList.objects.order_by('hyojijun')
     for ankens in anken:
         
-        if ankens.kanriNo == kanriNo and int(ankens.edaban) > edabanShitei:
+        if ankens.kanriNo == kanriNo and int(ankens.edaban) >= int(edabanShitei):
             edabanShitei = str(int(ankens.edaban)+1)
             
     return edabanShitei    
 
 
+# def hyojijunRefresh():
+#     anken = AnkenList.objects.order_by('hyojijun')
+#     i = 1
+#     for ankens in anken:
+        
+#         ankens.hyojijun = i
+#         i=i+1    
+            
+    
+    
+    
+    
+    
+    
+    
+
 
 def index (request):
+    kazu = AnkenList.objects.all().count()
     context = {
-        'ankenList' : AnkenList.objects.order_by('hyojijun')
+        'ankenList' : AnkenList.objects.order_by('hyojijun'),
+        'kazu' : kazu
     }
     return render(request,'index.html',context)
 
+def home(request):
+    my_name = 'Taro Yamada'
+    favourite_fruits = ['Apple','Grape','Lemon']
+    my_info = {
+        'name': 'Taro',
+        'age': 18
+    }
+    return render(request, 'home.html',context={
+        'my_name':my_name,
+        'favourite_fruits':favourite_fruits,
+        'my_info':my_info,
+    })
 
+def sample (request):
+    name = 'ichiro yamada'
+    height = 175.5
+    weight = 72
+    bmi = weight / (height /100)**2
+    page_url = 'https://www.google.com'
+    favourete_fruits = [
+        'Apple','Grape','Lemon'
+    ]
+    msg = """hello
+    my name is
+    ichiro
+    """
+    msg2 = '1234567890'
+    return render(request, 'sample.html',context = {
+        'name':name,
+        'bmi' : bmi,
+        'page_url':page_url,
+        'fruits':favourete_fruits,
+        'msg':msg,
+        'msg2':msg2
+    })
+
+class Country:
+    
+    def __init__(self, name, population, capital):
+        self.name = name
+        self.population = population
+        self.capital = capital
+
+def sample3(request):
+    country = Country('Japan', 100000000, 'Tokyo')
+    return render(request,'sample3.html',context={
+        'country':country
+    })
     
 def export2 (request):
+    kazu = AnkenList.objects.all().count()
     inputFile=request.POST.get('inputFile')
     context = {
         'ankenList' : AnkenList.objects.order_by('hyojijun'),
-        'inputFile' : inputFile
+        'inputFile' : inputFile,
+        'kazu' : kazu
     }
     if request.method == "POST":
         if "inputFile" in request.POST:
@@ -163,12 +236,19 @@ def export2 (request):
                 sheet['AT' + str(i+2)].value = row[45]
                 sheet['AU' + str(i+2)].value = row[46]
                 sheet['AV' + str(i+2)].value = row[47]
-                sheet['AW' + str(i+2)].value = row[48]
-                sheet['AX' + str(i+2)].value = row[49]
-                sheet['AY' + str(i+2)].value = row[50]
-                sheet['AZ' + str(i+2)].value = row[51]
-                sheet['BA' + str(i+2)].value = row[52]
-                sheet['BB' + str(i+2)].value = row[53]
+                # sheet['AW' + str(i+2)].value = row[48]
+                # sheet['AX' + str(i+2)].value = row[49]
+                # sheet['AY' + str(i+2)].value = row[50]
+                # sheet['AZ' + str(i+2)].value = row[51]
+                # sheet['BA' + str(i+2)].value = row[52]
+                # sheet['BB' + str(i+2)].value = row[53]
+                # ↓↓↓データベースのカラム順が違う為の対応（最終更新日が最終カラムになっている為）
+                sheet['AW' + str(i+2)].value = row[53]
+                sheet['AX' + str(i+2)].value = row[48]
+                sheet['AY' + str(i+2)].value = row[49]
+                sheet['AZ' + str(i+2)].value = row[50]
+                sheet['BA' + str(i+2)].value = row[51]
+                sheet['BB' + str(i+2)].value = row[52]
 
 
             c.close()
@@ -181,15 +261,21 @@ def export2 (request):
 
         
 def dataimport (request):
+    kazu = AnkenList.objects.all().count()
     context = {
-        'ankenList' : AnkenList.objects.order_by('hyojijun')
+        'ankenList' : AnkenList.objects.order_by('hyojijun'),
+        'kazu' : kazu
+        
     }
     return render(request,'import.html',context)
    
    
 def dataexport (request):
+    kazu = AnkenList.objects.all().count()
+    
     context = {
-        'ankenList' : AnkenList.objects.order_by('hyojijun')
+        'ankenList' : AnkenList.objects.order_by('hyojijun'),
+        'kazu' : kazu
     }
     return render(request,'export.html',context)
      
@@ -199,9 +285,9 @@ def import2 (request):
     os.environ.setdefault('DJANGO_SETTINGS_MODULE','first_project.settings')
     from django import setup
     setup()
-    
+    kazu = AnkenList.objects.all().count()
     inputFile=request.POST.get('inputFile')
-    print('インプットファイルは',inputFile)
+    # print('インプットファイルは',inputFile)
     if request.method == "POST":
         if "inputFile" in request.POST:
  
@@ -281,17 +367,25 @@ def import2 (request):
             ankenList=AnkenList.objects.order_by('hyojijun')   
             for anken in ankenList:
                 hantei=0
-                for edabanss in edabans:
-                    for kanriNoss in kanriNos:
-                        if anken.kanriNo==kanriNoss:
-                            if anken.edaban==edabanss:
-                                hantei=1
+                
+                for i in range(len(kanriNos)):
+                    if anken.kanriNo==kanriNos[i]:
+                        if anken.edaban==edabans[i]:
+                            hantei = 1
                 if hantei==0:
-                    AnkenList.objects.filter(id=anken.id).delete()                          
+                    AnkenList.objects.filter(id=anken.id).delete()                              
+        i = 1
+        anken = AnkenList.objects.order_by('hyojijun')
+        for ankens in anken:
+            ankens.hyojijun = i
+            ankens.save()
+            i=i+1
 
     context = {
         'ankenList' : AnkenList.objects.order_by('hyojijun'),
-        'inputFile' : inputFile
+        'inputFile' : inputFile,
+        'kazu' : kazu
+        
     }            
              
           
@@ -328,23 +422,14 @@ def importTest (request):
 
 def edit(request):
     form = forms.formAnkenList()
-    # a=AnkenList.objects.all().count()
-    # TestFormset = formset_factory(forms.formAnkenList)
-    # formset = TestFormset(request.POST or None)
-    # print("ふぉーむせっとは",formset)
-    # if formset.is_valid():
-    #     formset.save()
-        
-        # for form in formset:
-        #     print(form.cleaned_data)
-        
+    kazu = AnkenList.objects.all().count()    
     return render(
-        request,'edit.html',context={'form':form,'ankenList' : AnkenList.objects.order_by('hyojijun')}
+        request,'edit.html',context={'form':form,'ankenList' : AnkenList.objects.order_by('hyojijun'),'kazu':kazu}
     )
     
 def edit2(request):
-    # form = forms.formAnkenList()
-    
+    # print("りくえすとめそっどは",request.method)
+    kazu = AnkenList.objects.all().count()
     if request.method == 'POST':
         form = forms.formAnkenList()
         kanrishori=request.POST.getlist('kanriShori')
@@ -434,7 +519,7 @@ def edit2(request):
         form=forms.formAnkenList(initialValues or request.POST)
         
     return render(
-        request,'edit2.html',context={'checkType':checkType,'form':form,'ankenList' : AnkenList.objects.filter(id__in=list(map(int, checkBoxValue)))}
+        request,'edit2.html',context={'checkType':checkType,'form':form,'ankenList' : AnkenList.objects.filter(id__in=list(map(int, checkBoxValue))),'kazu':kazu}
     )
 
 
@@ -446,33 +531,78 @@ def edit2(request):
     
     
 def edit3(request):
+    kazu = AnkenList.objects.all().count()
     os.environ.setdefault('DJANGO_SETTINGS_MODULE','first_project.settings')
     from django import setup
     setup()
     form = forms.formAnkenList()
-    
+    # print( "りくえすとめそっどは",request.method)
     if request.method == 'POST':
         form = forms.formAnkenList(request.POST)
         checkType = request.POST['checkType']
+        # print("さぶみっとぼたんは",request.POST['checkType'])
         
         if checkType == "kanrishori":
             pass 
         if checkType == "henko":
             if form.is_valid():
+                anken = AnkenList.objects.order_by('hyojijun')
+                statuscode = form.cleaned_data.get('statusCode')
+                statusanken = AnkenStatus.objects.filter(ankenStatusCode=int(statuscode))
+                status = statusanken[0].ankenStatus
+                                
+                torihikisakicode = form.cleaned_data.get('torihikisakiCode')
+                torihikisakianken = AnkenTorihikisaki.objects.filter(ankenTorihikisakiCode=torihikisakicode)
+                torihikisaki = torihikisakianken[0].ankenTorihikisakiKaisha
+                
+                tantoshacode = form.cleaned_data.get('shainNo')
+                tantoshaanken = AnkenTantosha.objects.filter(ankenTantoshaCode=tantoshacode)
+                tantosha = tantoshaanken[0].ankenTantoshaMei
+                
+                kanriNo=form.cleaned_data.get('kanriNo')
+                edaban=form.cleaned_data.get('edaban')
+                hyojijuns =form.cleaned_data.get('hyojijun')
+                edabanShitei = edaban
+                                
+                for ankens in anken:
+                    if ankens.kanriNo==kanriNo:
+                        if ankens.edaban > edaban:
+                            edabanShitei=int(ankens.edaban) + 1
+                
+                
+                
+                # edabanShitei=0
+                for ankens in anken:
+                    
+                    # if ankens.kanriNo == kanriNo and int(ankens.edaban) > edabanShitei:
+                    #     edabanShitei = int(ankens.edaban)
+                    if ankens.hyojijun >=hyojijuns:
+                        ankens.hyojijun=ankens.hyojijun+1
+                        ankens.save()
+                
+                for ankens in anken:
+                    if ankens.hyojijun == hyojijuns:
+                        hyojijuns=hyojijuns+1
+                
+                if int(statuscode) == 99:
+                    edabanShitei = 0 
+                
                 ankn, created=AnkenList.objects.update_or_create (    
                     kanriNo= form.cleaned_data.get('kanriNo'),
                     edaban= form.cleaned_data.get('edaban'),
                     defaults={
                         "keiriShonin" : form.cleaned_data.get('keiriShonin'),
                         "statusCode" : form.cleaned_data.get('statusCode'),
-                        "status" : form.cleaned_data.get('status'),
+                        # "status" : form.cleaned_data.get('status'),
+                        "status" : status,
                         "edabanGroup" : form.cleaned_data.get('edabanGroup'),
                         "shiharaiPattern" : form.cleaned_data.get('shiharaiPattern'),
                         "kanriNo" : form.cleaned_data.get('kanriNo'),
-                        "edaban" : form.cleaned_data.get('edaban'),
+                        "edaban" : edabanShitei,
                         "ankenMei" : form.cleaned_data.get('ankenMei'),
                         "torihikisakiCode" : form.cleaned_data.get('torihikisakiCode'),
-                        "torihikisakiMei" : form.cleaned_data.get('torihikisakiMei'),
+                        # "torihikisakiMei" : form.cleaned_data.get('torihikisakiMei'),
+                        "torihikisakiMei" : torihikisaki,
                         "kanjokamoku" : form.cleaned_data.get('kanjokamoku'),
                         "keikakuTanka" : form.cleaned_data.get('keikakuTanka'),
                         "keikakuSuu" : form.cleaned_data.get('keikakuSuu'),
@@ -510,17 +640,36 @@ def edit3(request):
                         "keikaku_Jisseki" : form.cleaned_data.get('keikaku_Jisseki'),
                         "kurikaeshiKigen" : form.cleaned_data.get('kurikaeshiKigen'),
                         "konyuKaisha" : form.cleaned_data.get('konyuKaisha'),
-                        "dataKoshinbi" : form.cleaned_data.get('dataKoshinbi'),
-                        "saishuKoshinsha" : form.cleaned_data.get('saishuKoshinsha'),
+                        # "dataKoshinbi" : form.cleaned_data.get('dataKoshinbi'),
+                        "dataKoshinbi" : timezone.now,
+                        # "saishuKoshinsha" : form.cleaned_data.get('saishuKoshinsha'),
+                        "saishuKoshinsha" : str(request.user),
                         "shainNo" : form.cleaned_data.get('shainNo'),
-                        "tantosha" : form.cleaned_data.get('tantosha'),
+                        # "tantosha" : form.cleaned_data.get('tantosha'),
+                        "tantosha" : tantosha,
                         "comment" : form.cleaned_data.get('comment'),
-                        "hyojijun" : form.cleaned_data.get('hyojijun')
+                        "hyojijun" : hyojijuns
                     }    
-                )    
+                ) 
+            
+                
+                   
         if checkType == "hukusha":
             if form.is_valid():
                 anken = AnkenList.objects.order_by('hyojijun')
+                statuscode = form.cleaned_data.get('statusCode')
+                statusanken = AnkenStatus.objects.filter(ankenStatusCode=int(statuscode))
+                status = statusanken[0].ankenStatus
+                
+                torihikisakicode = form.cleaned_data.get('torihikisakiCode')
+                torihikisakianken = AnkenTorihikisaki.objects.filter(ankenTorihikisakiCode=torihikisakicode)
+                torihikisaki = torihikisakianken[0].ankenTorihikisakiKaisha
+                
+                tantoshacode = form.cleaned_data.get('shainNo')
+                tantoshaanken = AnkenTantosha.objects.filter(ankenTantoshaCode=tantoshacode)
+                tantosha = tantoshaanken[0].ankenTantoshaMei
+                
+                
                 kanriNo=form.cleaned_data.get('kanriNo')
                 edaban=form.cleaned_data.get('edaban')
                 hyojijuns =form.cleaned_data.get('hyojijun')
@@ -529,10 +678,17 @@ def edit3(request):
                     edaban= edaban
                 )    
                 
-                edabanShitei = maxEdaban(kanriNo)
-                
-                
-                
+                edabanShitei = edaban
+                edabanMax = 0
+                for ankens in anken:
+                    if ankens.kanriNo==kanriNo:
+                        if ankens.edaban>=edaban:
+                            edabanMax=ankens.edaban
+                for ankens in anken:
+                    if ankens.kanriNo==kanriNo:
+                        if ankens.edaban==edaban:
+                            edabanShitei=int(edabanMax)+1
+                            
                 # edabanShitei=0
                 for ankens in anken:
                     
@@ -542,18 +698,27 @@ def edit3(request):
                         ankens.hyojijun=ankens.hyojijun+1
                         ankens.save()
                 
+                for ankens in anken:
+                    if ankens.hyojijun == hyojijuns:
+                        hyojijuns=hyojijuns+1
+                
+                if int(statuscode) == 99:
+                    edabanShitei = 0
+                    
                 a = AnkenList(
                         
                         keiriShonin= form.cleaned_data.get('keiriShonin'),
                         statusCode= form.cleaned_data.get('statusCode'),
-                        status=form.cleaned_data.get('status'),
+                        # status=form.cleaned_data.get('status'),
+                        status=status,
                         edabanGroup=form.cleaned_data.get('edabanGroup'),
                         shiharaiPattern=form.cleaned_data.get('shiharaiPattern'),
                         kanriNo=form.cleaned_data.get('kanriNo'),
                         edaban=edabanShitei,
                         ankenMei=form.cleaned_data.get('ankenMei'),
                         torihikisakiCode=form.cleaned_data.get('torihikisakiCode'),
-                        torihikisakiMei=form.cleaned_data.get('torihikisakiMei'),
+                        # torihikisakiMei=form.cleaned_data.get('torihikisakiMei'),
+                        torihikisakiMei=torihikisaki,
                         kanjokamoku=form.cleaned_data.get('kanjokamoku'),
                         keikakuTanka=form.cleaned_data.get('keikakuTanka'),
                         keikakuSuu=form.cleaned_data.get('keikakuSuu'),
@@ -591,17 +756,20 @@ def edit3(request):
                         keikaku_Jisseki=form.cleaned_data.get('keikaku_Jisseki'),
                         kurikaeshiKigen=form.cleaned_data.get('kurikaeshiKigen'),
                         konyuKaisha=form.cleaned_data.get('konyuKaisha'),
-                        dataKoshinbi=form.cleaned_data.get('dataKoshinbi'),
-                        saishuKoshinsha=form.cleaned_data.get('saishuKoshinsha'),
+                        # dataKoshinbi=form.cleaned_data.get('dataKoshinbi'),
+                        # dataKoshinbi=timezone.now,
+                        dataKoshinbi=datetime.datetime.today(),
+                        saishuKoshinsha=str(request.user),
                         shainNo=form.cleaned_data.get('shainNo'),
-                        tantosha=form.cleaned_data.get('tantosha'),
+                        # tantosha=form.cleaned_data.get('tantosha'),
+                        tantosha=tantosha,
                         comment=form.cleaned_data.get('comment'),
-                        hyojijun=hyojijuns+1
+                        hyojijun=hyojijuns
                 )    
                 
-                a.save(force_insert=True)
+                a.save()
                 
-                
+            
                 
         if checkType == "sakujo":        
             if form.is_valid():
@@ -616,13 +784,18 @@ def edit3(request):
                         ankens.hyojijun=ankens.hyojijun-1
                         ankens.save()
                 
-                
-                
                 AnkenList.objects.filter(
                     kanriNo= form.cleaned_data.get('kanriNo'),
                     edaban= form.cleaned_data.get('edaban')
                 ).delete() 
-
+    
+        i = 1
+        anken = AnkenList.objects.order_by('hyojijun')
+        for ankens in anken:
+            ankens.hyojijun = i
+            ankens.save()
+            i=i+1
+    
     return render(
-        request,'edit3.html',context={'form':form,'ankenList' : AnkenList.objects.order_by('hyojijun'), 'checkType':checkType}
+        request,'edit3.html',context={'form':form,'ankenList' : AnkenList.objects.order_by('hyojijun'), 'checkType':checkType,'kazu':kazu}
     )    

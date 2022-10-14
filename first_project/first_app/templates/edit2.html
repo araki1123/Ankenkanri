@@ -26,7 +26,7 @@
 {%elif checkType == 'hukusha'%}
 <p>編集内容をコピーしますか？</p>
 {%elif checkType == 'sakujo'%}
-<p>編集内容を削除しますか？</p>
+<p>選択した案件を削除しますか？</p>
 {%endif%}
     
    
@@ -34,7 +34,6 @@
 <div style="margin: 15px 15px; ">
         {% comment %} <div class="d-grid gap-2 d-md-block justify-content-center"> {% endcomment %}
         {% comment %} <a  class="btn btn-primary" href="edit3" type="submit" style="width:135pt;height:45pt;margin: 5px 5px;">確定</a><a  class="btn btn-primary" href="index" type="submit" style="width:135pt;height:45pt;margin: 5px 5px;">確定</a> {% endcomment %}
-        <a  class="btn btn-primary" href="index" type="submit" style="width:135pt;height:45pt;margin: 5px 5px;">TOPへ戻る</a>
 
 </div>
     
@@ -42,8 +41,12 @@
         {% comment %} <div class="card-header"> {% endcomment %}
         {% comment %} <div class="p-3 mb-2 bg-info text-white"> {% endcomment %}
         <form action="edit3" method='POST' >
-            
-        {% csrf_token %}
+
+            <input type = "hidden" name="checkType" value= {{checkType}}>
+            <a  class="btn btn-primary" href="index" type="submit" style="width:135pt;height:45pt;margin: 5px 5px;">TOPへ戻る</a>
+
+            <input type = "submit" value = "確定" style="width:135pt;height:45pt;margin: 5px 5px;" class="btn btn-primary" href="{% url 'first_app:edit3'%}">
+            {% csrf_token %}
         <div style="height:290px; width:1280px; overflow:scroll" class="anken-table">
         <table>    
         {% comment %} {{form.as_table}} {% endcomment %}
@@ -53,14 +56,14 @@
             <th norat>id</th>
             <th norat>経理承認</th>
             <th norat>ステータスコード</th>
-            <th norat>案件ステータス</th>
+            {% comment %} <th norat>案件ステータス</th> {% endcomment %}
             <th norat>枝番グループ</th>
             <th norat>支払パターン</th>
             <th norat>管理No.</th>
             <th norat>枝番</th>
             <th norat>案件名</th>
             <th norat>取引先コード</th>
-            <th norat>取引先名</th>
+            {% comment %} <th norat>取引先名</th> {% endcomment %}
             <th norat>勘定科目</th>
             <th norat>計画単価</th>
             <th norat>計画数</th>
@@ -101,23 +104,25 @@
             <th norat>最終データ更新日</th>
             <th norat>最終更新者</th>
             <th norat>社員番号</th>
-            <th norat>担当者名</th>
+            {% comment %} <th norat>担当者名</th> {% endcomment %}
             <th norat>コメント</th>
             <th norat>表示順</th>
         </tr>
         <tr>
-            
+
+
+
             <th norat>{{form.id }}</th>
             <td norat >{{form.keiriShonin}}</td>
             <td norat >{{form.statusCode}}</td>
-            <td norat>{{form.status}}</td>
+            {% comment %} <td norat>{{form.status}}</td> {% endcomment %}
             <td norat>{{form.edabanGroup}}</td>
             <td norat>{{form.shiharaiPattern}}</td>
             <td norat>{{form.kanriNo}}</td>
             <td norat>{{form.edaban}}</td>
             <td norat>{{form.ankenMei}}</td>
             <td norat>{{form.torihikisakiCode}}</td>
-            <td norat>{{form.torihikisakiMei}}</td>
+            {% comment %} <td norat>{{form.torihikisakiMei}}</td> {% endcomment %}
             <td norat>{{form.kanjokamoku}}</td>
             <td norat>{{form.keikakuTanka}}</td>
             <td norat>{{form.keikakuSuu}}</td>
@@ -158,7 +163,7 @@
             <td norat>{{form.dataKoshinbi}}</td>
             <td norat>{{form.saishuKoshinsha}}</td>
             <td norat>{{form.shainNo}}</td>
-            <td norat>{{form.tantosha}}</td>
+            {% comment %} <td norat>{{form.tantosha}}</td> {% endcomment %}
             <td norat>{{form.comment}}</td>
             <td norat>{{form.hyojijun}}</td>
             
@@ -174,8 +179,6 @@
     </div>
     
         {% comment %} <input type = "submit" value = "確定" class="btn btn-primary" onclick="location.href='edit3' {{checkType}}"> {% endcomment %}
-        <input type = "hidden" name="checkType" value= {{checkType}}>
-        <input type = "submit" value = "確定" class="btn btn-primary" href="{% url 'first_app:edit3'%}">
 
     </form>
     {% comment %} <a href="{% url 'first_app:edit3' name='araki'%}" >home</a> {% endcomment %}

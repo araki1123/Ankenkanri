@@ -3,9 +3,7 @@
     border: 0px
   }
   
- 
-
-  .anken-table{
+   .anken-table{
     border: 1px double black;
     border-collapse:separate;
     overflow: auto;
@@ -35,14 +33,36 @@
 .anken-table tr:first-child th{
     border-top: 1px solid #999;
 }
-.anken-table th:first-child{
+ .anken-table th:first-child{
     border-left: 1px solid #999;
 }
 .anken-table tr:first-child th:first-child{
     z-index: 1;
+} 
+
+
+  
+.a37{
+  color:blue;
+
 }
 
-/* .formList{
-  color: red;
+
+/* .anken-table td:first-child 
+{
+  left:0px;
 } */
-  
+
+
+/* .fixed01{
+  left: 0;
+}
+.fixed02{
+  left: 10px;
+} */
+/* .anken-table td:nth-child(2) {
+  left:1px;
+}
+.anken-table td:nth-child(3) {
+  left:2px;
+} */

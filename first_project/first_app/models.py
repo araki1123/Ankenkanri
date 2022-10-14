@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 class AnkenList(models.Model):
@@ -49,7 +50,7 @@ class AnkenList(models.Model):
     keikaku_Jisseki = models.IntegerField(null=True,blank=True)
     kurikaeshiKigen = models.DateTimeField(null=True,blank=True)
     konyuKaisha = models.CharField(null=True,blank=True,max_length=30)
-    dataKoshinbi = models.DateTimeField(null=True,blank=True)
+    dataKoshinbi = models.DateTimeField(default=timezone.datetime.now)
     saishuKoshinsha = models.CharField(null=True,blank=True,max_length=30)
     shainNo = models.IntegerField(null=True,blank=True)
     tantosha = models.CharField(null=True,blank=True,max_length=30)
