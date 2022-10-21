@@ -12,58 +12,62 @@ from first_app.models import AnkenList
 a = AnkenList(
     
     keiriShonin= True,
-    statusCode= 0,
-    status= '案件入力（作成中）',
-    edabanGroup= 3,
-    shiharaiPattern= 3,
-    kanriNo= 'S22-009',
-    edaban= 21,
-    ankenMei= 'モバイルPCレンタル月額費用　9月',
-    torihikisakiCode= 100003,
-    torihikisakiMei= 'ソフトバンク㈱',
-    kanjokamoku= '資本準備金',
+    statusCode= 20,
+    status= '案件無効状態',
+    edabanGroup= 1,
+    shiharaiPattern= 0,
+    kanriNo= 'S22-070',
+    edaban= 0,
+    ankenMei= '無効案件てすと',
+    torihikisakiCode= 100002,
+    torihikisakiMei= 'ミツイワ㈱',
 
 
 
 
 
 
-    mitsumoriLink= 'https://advantec-group.ent.box.com/file/925364524384、https://advantec-group.ent.box.com/file/925858622263',
 
 
 
-    ringishoNo= '2022-0654',
-    ringishoLink= 'https://advantec-group.ent.box.com/file/925364706508',
-    wfNo= '稟議-2022-0654',
-    keiyakuKingaku= 3260510,
-    keiyakushoNo= '2270-059204',
-    keiyakushoLink= 'https://…',
-
-    onatsuRingiLink= 'https://…',
 
 
 
-    chumonLink= 'https://…',
-    nohinKigen= '2022-10-1 00:00',
-    kenshuKigen= '2022-11-30 00:00',
-    shiharaiKigen= '2022-12-28 00:00',
 
 
 
-    nohinLink= 'https://…',
 
 
 
-    seikyushoLink= 'https://…',
-    keikaku_Jisseki= 99999999,
 
-    konyuKaisha= 'TRK',
-    dataKoshinbi= '2022-9-9 00:00',
-    saishuKoshinsha= '荒木',
-    shainNo= '12345',
-    tantosha= '市ノ川',
-    comment= '・・・・',
-    hyojijun= 22
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    dataKoshinbi= '2022-10-05 20:55:12.146166',
+
+    shainNo= '90001',
+    tantosha= '伊豆猛',
+
+    hyojijun= 48
+
+
+
+
 
 
 

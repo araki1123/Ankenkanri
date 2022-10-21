@@ -11,9 +11,9 @@ from first_app.models import AnkenStatus
 # AnkenList.objects.create(
 a = AnkenStatus(
     
-    ankenStatusCode= 10,
+    ankenStatusCode= 99,
     
-    ankenStatus = '支払処理(完了）'
+    ankenStatus = '親案件用'
 )
 
 a.save(force_insert=True)

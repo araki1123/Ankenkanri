@@ -7,13 +7,11 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE','first_project.settings')
 from django import setup
 setup()
 
-from first_app.models import AnkenTantosha
+from first_app.models import AnkenList
 # AnkenList.objects.create(
-a = AnkenTantosha(
+AnkenList.objects.filter(
+                    kanriNo= "S22-009",
+                    edaban= 0
+                ).delete()    
     
-    ankenTantoshaCode = 00000,
-    ankenTantoshaMei = ''
     
-)
-
-a.save(force_insert=True)

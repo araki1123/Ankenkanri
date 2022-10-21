@@ -20,6 +20,7 @@
 </div>
 
         
+        <p>デスクトップ直下にインポートするファイルを用意して下さい</p>
         <p>インポートするファイルを選択して下さい</p>
         <form  action = "{% url 'first_app:import2'%}" method="POST">
             {% csrf_token %}
@@ -27,7 +28,7 @@
             {% csrf_token %} {% endcomment %}
 
                 
-        <input id="myfile" name="inputFile" type="file" accept=".xlsx" required>
+        <input id="myfile" name="inputFile" type="file" accept=".xlsx" required required enctype="multipart/form-data">
         <button type="submit" href="import2" name = "hozon_button" class="btn btn-primary" style="width:70pt;height:30pt;margin: 5px 5px;">取込む</button><br><br>
         <input type = "hidden" id = "kazu" name="kazu" value= {{kazu}}>
     </form>

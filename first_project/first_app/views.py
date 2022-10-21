@@ -10,6 +10,7 @@ from django.forms import formset_factory
 from django.utils import timezone
 from django.contrib.auth.models import User
 import datetime
+from django.core.files.storage import FileSystemStorage
 
 import sqlite3
 import openpyxl
@@ -20,6 +21,7 @@ from .models import AnkenList
 from .models import AnkenStatus
 from .models import AnkenTorihikisaki
 from .models import AnkenTantosha
+from .models import AnkenKanjokamoku
 
 # Create your views here.
 
@@ -114,6 +116,7 @@ def sample3(request):
 def export2 (request):
     kazu = AnkenList.objects.all().count()
     inputFile=request.POST.get('inputFile')
+    # print("ぱすは",request.FILES['inputFile'])
     context = {
         'ankenList' : AnkenList.objects.order_by('hyojijun'),
         'inputFile' : inputFile,
@@ -121,7 +124,7 @@ def export2 (request):
     }
     if request.method == "POST":
         if "inputFile" in request.POST:
- 
+            
             workbook = openpyxl.Workbook()
             sheet = workbook.active
             sheet['A1'].value = 'id'
@@ -135,31 +138,31 @@ def export2 (request):
             sheet['I1'].value = '案件名'
             sheet['J1'].value = '取引先コード'
             sheet['K1'].value = '取引先名'
-            sheet['L1'].value = '勘定科目'
-            sheet['M1'].value = '計画単価'
-            sheet['N1'].value = '計画数'
-            sheet['O1'].value = '計画合計金額'
-            sheet['P1'].value = '見積単価'
-            sheet['Q1'].value = '見積数'
-            sheet['R1'].value = '見積合計金額'
-            sheet['S1'].value = '見積書リンク'
-            sheet['T1'].value = '稟議書単価'
-            sheet['U1'].value = '稟議書数'
-            sheet['V1'].value = '稟議書合計'
-            sheet['W1'].value = '稟議書No.'
-            sheet['X1'].value = '稟議書リンク'
-            sheet['Y1'].value = 'ワークフローNo.'
-            sheet['Z1'].value = '契約金額'
-            sheet['AA1'].value = '契約書No.'
-            sheet['AB1'].value = '契約書リンク'
-            sheet['AC1'].value = '押捺稟議No.'
-            sheet['AD1'].value = '押捺稟議リンク'
-            sheet['AE1'].value = '注文単価'
-            sheet['AF1'].value = '注文数'
-            sheet['AG1'].value = '注文合計金額'
-            sheet['AH1'].value = '注文書リンク'
-            sheet['AI1'].value = '納品日期限'
-            sheet['AJ1'].value = '検収日期限'
+            sheet['L1'].value = '勘定科目コード'
+            sheet['M1'].value = '勘定科目'
+            sheet['N1'].value = '計画単価'
+            sheet['O1'].value = '計画数'
+            sheet['P1'].value = '計画合計金額'
+            sheet['Q1'].value = '見積単価'
+            sheet['R1'].value = '見積数'
+            sheet['S1'].value = '見積合計金額'
+            sheet['T1'].value = '見積書リンク'
+            sheet['U1'].value = '稟議書単価'
+            sheet['V1'].value = '稟議書数'
+            sheet['W1'].value = '稟議書合計'
+            sheet['X1'].value = '稟議書No.'
+            sheet['Y1'].value = '稟議書リンク'
+            sheet['Z1'].value = 'ワークフローNo.'
+            sheet['AA1'].value = '契約金額'
+            sheet['AB1'].value = '契約書No.'
+            sheet['AC1'].value = '契約書リンク'
+            sheet['AD1'].value = '押捺稟議No.'
+            sheet['AE1'].value = '押捺稟議リンク'
+            sheet['AF1'].value = '注文単価'
+            sheet['AG1'].value = '注文数'
+            sheet['AH1'].value = '注文合計金額'
+            sheet['AI1'].value = '注文書リンク'
+            sheet['AJ1'].value = '納品日期限'
             sheet['AK1'].value = '支払日期限'
             sheet['AL1'].value = '納品単価'
             sheet['AM1'].value = '納品数'
@@ -236,23 +239,24 @@ def export2 (request):
                 sheet['AT' + str(i+2)].value = row[45]
                 sheet['AU' + str(i+2)].value = row[46]
                 sheet['AV' + str(i+2)].value = row[47]
-                # sheet['AW' + str(i+2)].value = row[48]
-                # sheet['AX' + str(i+2)].value = row[49]
-                # sheet['AY' + str(i+2)].value = row[50]
-                # sheet['AZ' + str(i+2)].value = row[51]
-                # sheet['BA' + str(i+2)].value = row[52]
-                # sheet['BB' + str(i+2)].value = row[53]
+                sheet['AW' + str(i+2)].value = row[48]
+                sheet['AX' + str(i+2)].value = row[49]
+                sheet['AY' + str(i+2)].value = row[50]
+                sheet['AZ' + str(i+2)].value = row[51]
+                sheet['BA' + str(i+2)].value = row[52]
+                sheet['BB' + str(i+2)].value = row[53]
                 # ↓↓↓データベースのカラム順が違う為の対応（最終更新日が最終カラムになっている為）
-                sheet['AW' + str(i+2)].value = row[53]
-                sheet['AX' + str(i+2)].value = row[48]
-                sheet['AY' + str(i+2)].value = row[49]
-                sheet['AZ' + str(i+2)].value = row[50]
-                sheet['BA' + str(i+2)].value = row[51]
-                sheet['BB' + str(i+2)].value = row[52]
+                # sheet['AW' + str(i+2)].value = row[53]
+                # sheet['AX' + str(i+2)].value = row[48]
+                # sheet['AY' + str(i+2)].value = row[49]
+                # sheet['AZ' + str(i+2)].value = row[50]
+                # sheet['BA' + str(i+2)].value = row[51]
+                # sheet['BB' + str(i+2)].value = row[52]
 
 
             c.close()
-            workbook.save(inputFile) 
+            desktopDir = os.path.expanduser('~/Desktop')
+            workbook.save(desktopDir + "/" + inputFile) 
  
     
         
@@ -287,11 +291,12 @@ def import2 (request):
     setup()
     kazu = AnkenList.objects.all().count()
     inputFile=request.POST.get('inputFile')
+    desktopDir = os.path.expanduser('~/Desktop')
     # print('インプットファイルは',inputFile)
     if request.method == "POST":
         if "inputFile" in request.POST:
  
-            workbook = openpyxl.load_workbook(inputFile)
+            workbook = openpyxl.load_workbook(desktopDir + "/" + inputFile)
             sheet = workbook.active
             it = sheet.iter_rows(min_row=2)
             kanriNos = []
@@ -315,31 +320,31 @@ def import2 (request):
                         "ankenMei" : row[8].value,
                         "torihikisakiCode" : row[9].value,
                         "torihikisakiMei" : row[10].value,
-                        "kanjokamoku" : row[11].value,
-                        "keikakuTanka" : row[12].value,
-                        "keikakuSuu" : row[13].value,
-                        "keikakuGokei" : row[14].value,
-                        "mitsumoriTanka" : row[15].value,
-                        "mitsumoriSuu" : row[16].value,
-                        "mitsumoriGokei" : row[17].value,
-                        "mitsumoriLink" : row[18].value,
-                        "ringiTanka" : row[19].value,
-                        "ringiSuu" : row[20].value,
-                        "ringiGokei" : row[21].value,
-                        "ringishoNo" : row[22].value,
-                        "ringishoLink" : row[23].value,
-                        "wfNo" : row[24].value,
-                        "keiyakuKingaku" : row[25].value,
-                        "keiyakushoNo" : row[26].value,
-                        "keiyakushoLink" : row[27].value,
-                        "onatsuRingiNo" : row[28].value,
-                        "onatsuRingiLink" : row[29].value,
-                        "chumonTanka" : row[30].value,
-                        "chumonSuu" : row[31].value,
-                        "chumonGokei" : row[32].value,
-                        "chumonLink" : row[33].value,
-                        "nohinKigen" : row[34].value,
-                        "kenshuKigen" : row[35].value,
+                        "kanjokamokucCode" : row[11].value,
+                        "kanjokamoku" : row[12].value,
+                        "keikakuTanka" : row[13].value,
+                        "keikakuSuu" : row[14].value,
+                        "keikakuGokei" : row[15].value,
+                        "mitsumoriTanka" : row[16].value,
+                        "mitsumoriSuu" : row[17].value,
+                        "mitsumoriGokei" : row[18].value,
+                        "mitsumoriLink" : row[19].value,
+                        "ringiTanka" : row[20].value,
+                        "ringiSuu" : row[21].value,
+                        "ringiGokei" : row[22].value,
+                        "ringishoNo" : row[23].value,
+                        "ringishoLink" : row[24].value,
+                        "wfNo" : row[25].value,
+                        "keiyakuKingaku" : row[26].value,
+                        "keiyakushoNo" : row[27].value,
+                        "keiyakushoLink" : row[28].value,
+                        "onatsuRingiNo" : row[29].value,
+                        "onatsuRingiLink" : row[30].value,
+                        "chumonTanka" : row[31].value,
+                        "chumonSuu" : row[32].value,
+                        "chumonGokei" : row[33].value,
+                        "chumonLink" : row[34].value,
+                        "nohinKigen" : row[35].value,
                         "shiharaiKigen" : row[36].value,
                         "nohinTanka" : row[37].value,
                         "nohinSuu" : row[38].value,
@@ -469,6 +474,7 @@ def edit2(request):
             "ankenMei":obj[0].ankenMei,
             "torihikisakiCode":obj[0].torihikisakiCode,
             "torihikisakiMei":obj[0].torihikisakiMei,
+            "kanjokamokuCode":obj[0].kanjokamokuCode,
             "kanjokamoku":obj[0].kanjokamoku,
             "keikakuTanka":obj[0].keikakuTanka,
             "keikakuSuu":obj[0].keikakuSuu,
@@ -493,7 +499,6 @@ def edit2(request):
             "chumonGokei":obj[0].chumonGokei,
             "chumonLink":obj[0].chumonLink,
             "nohinKigen":obj[0].nohinKigen,
-            "kenshuKigen":obj[0].kenshuKigen,
             "shiharaiKigen":obj[0].shiharaiKigen,
             "nohinTanka":obj[0].nohinTanka,
             "nohinSuu":obj[0].nohinSuu,
@@ -559,6 +564,32 @@ def edit3(request):
                 tantoshaanken = AnkenTantosha.objects.filter(ankenTantoshaCode=tantoshacode)
                 tantosha = tantoshaanken[0].ankenTantoshaMei
                 
+                kanjokamokucode = form.cleaned_data.get('kanjokamokuCode')
+                kanjokamokuanken = AnkenKanjokamoku.objects.filter(ankenKanjokamokuCode=kanjokamokucode)
+                kanjokamoku = kanjokamokuanken[0].ankenKanjokamoku
+                
+                keikakugokei=NULL
+                mitsumorigokei=NULL
+                ringigokei  =NULL
+                chumongokei =NULL
+                nohingokei =NULL
+                konyugokei =NULL
+                
+                
+                if form.cleaned_data.get('keikakuTanka')is not None and form.cleaned_data.get('keikakuSuu')is not None:
+                    keikakugokei = int(form.cleaned_data.get('keikakuTanka'))*int(form.cleaned_data.get('keikakuSuu'))
+                # if (form.cleaned_data.get('mitsumoriTanka')!=0 or form.cleaned_data.get('mitsumoriTanka') is not None)and (form.cleaned_data.get('mitsumoriSuu')!=0 or form.cleaned_data.get('mitsumoriSuu')is not None):
+                if form.cleaned_data.get('mitsumoriTanka') is not None and form.cleaned_data.get('mitsumoriSuu')is not None:
+                    mitsumorigokei = int(form.cleaned_data.get('mitsumoriTanka'))*int(form.cleaned_data.get('mitsumoriSuu'))
+                if form.cleaned_data.get('ringiTanka') is not None and  form.cleaned_data.get('ringiSuu')is not None:                   
+                    ringigokei = int(form.cleaned_data.get('ringiTanka'))*int(form.cleaned_data.get('ringiSuu'))
+                if form.cleaned_data.get('chumonTanka')is not None and form.cleaned_data.get('chumonSuu')is not None:
+                    chumongokei = int(form.cleaned_data.get('chumonTanka'))*int(form.cleaned_data.get('chumonSuu'))
+                if form.cleaned_data.get('nohinTanka')is not None and form.cleaned_data.get('nohinSuu')is not None:
+                    nohingokei = int(form.cleaned_data.get('nohinTanka'))*int(form.cleaned_data.get('nohinSuu'))
+                if form.cleaned_data.get('shiharaiTanka')is not None and form.cleaned_data.get('konyuSuu')is not None:
+                    konyugokei = int(form.cleaned_data.get('shiharaiTanka'))*int(form.cleaned_data.get('konyuSuu'))
+                               
                 kanriNo=form.cleaned_data.get('kanriNo')
                 edaban=form.cleaned_data.get('edaban')
                 hyojijuns =form.cleaned_data.get('hyojijun')
@@ -603,17 +634,18 @@ def edit3(request):
                         "torihikisakiCode" : form.cleaned_data.get('torihikisakiCode'),
                         # "torihikisakiMei" : form.cleaned_data.get('torihikisakiMei'),
                         "torihikisakiMei" : torihikisaki,
-                        "kanjokamoku" : form.cleaned_data.get('kanjokamoku'),
+                        "kanjokamokuCode" : form.cleaned_data.get('kanjokamokuCode'),
+                        "kanjokamoku" : kanjokamoku,
                         "keikakuTanka" : form.cleaned_data.get('keikakuTanka'),
                         "keikakuSuu" : form.cleaned_data.get('keikakuSuu'),
-                        "keikakuGokei" : form.cleaned_data.get('keikakuGokei'),
+                        "keikakuGokei" : keikakugokei,
                         "mitsumoriTanka" : form.cleaned_data.get('mitsumoriTanka'),
                         "mitsumoriSuu" : form.cleaned_data.get('mitsumoriSuu'),
-                        "mitsumoriGokei" : form.cleaned_data.get('mitsumoriGokei'),
+                        "mitsumoriGokei" : mitsumorigokei,
                         "mitsumoriLink" : form.cleaned_data.get('mitsumoriLink'),
                         "ringiTanka" : form.cleaned_data.get('ringiTanka'),
                         "ringiSuu" : form.cleaned_data.get('ringiSuu'),
-                        "ringiGokei" : form.cleaned_data.get('ringiGokei'),
+                        "ringiGokei" : ringigokei,
                         "ringishoNo" : form.cleaned_data.get('ringishoNo'),
                         "ringishoLink" : form.cleaned_data.get('ringishoLink'),
                         "wfNo" : form.cleaned_data.get('wfNo'),
@@ -624,18 +656,17 @@ def edit3(request):
                         "onatsuRingiLink" : form.cleaned_data.get('onatsuRingiLink'),
                         "chumonTanka" : form.cleaned_data.get('chumonTanka'),
                         "chumonSuu" : form.cleaned_data.get('chumonSuu'),
-                        "chumonGokei" : form.cleaned_data.get('chumonGokei'),
+                        "chumonGokei" : chumongokei,
                         "chumonLink" : form.cleaned_data.get('chumonLink'),
                         "nohinKigen" : form.cleaned_data.get('nohinKigen'),
-                        "kenshuKigen" : form.cleaned_data.get('kenshuKigen'),
                         "shiharaiKigen" : form.cleaned_data.get('shiharaiKigen'),
                         "nohinTanka" : form.cleaned_data.get('nohinTanka'),
                         "nohinSuu" : form.cleaned_data.get('nohinSuu'),
-                        "nohinGokei" : form.cleaned_data.get('nohinGokei'),
+                        "nohinGokei" : nohingokei,
                         "nohinLink" : form.cleaned_data.get('nohinLink'),
                         "shiharaiTanka" : form.cleaned_data.get('shiharaiTanka'),
                         "konyuSuu" : form.cleaned_data.get('konyuSuu'),
-                        "konyuGokei" : form.cleaned_data.get('konyuGokei'),
+                        "konyuGokei" : konyugokei,
                         "seikyushoLink" : form.cleaned_data.get('seikyushoLink'),
                         "keikaku_Jisseki" : form.cleaned_data.get('keikaku_Jisseki'),
                         "kurikaeshiKigen" : form.cleaned_data.get('kurikaeshiKigen'),
@@ -669,7 +700,31 @@ def edit3(request):
                 tantoshaanken = AnkenTantosha.objects.filter(ankenTantoshaCode=tantoshacode)
                 tantosha = tantoshaanken[0].ankenTantoshaMei
                 
-                
+                kanjokamokucode = form.cleaned_data.get('kanjokamokuCode')
+                kanjokamokuanken = AnkenKanjokamoku.objects.filter(ankenKanjokamokuCode=kanjokamokucode)
+                kanjokamoku = kanjokamokuanken[0].ankenKanjokamoku
+
+                keikakugokei=NULL
+                mitsumorigokei=NULL
+                ringigokei  =NULL
+                chumongokei =NULL
+                nohingokei =NULL
+                konyugokei =NULL
+
+                if form.cleaned_data.get('keikakuTanka')is not None and form.cleaned_data.get('keikakuSuu')is not None:
+                    keikakugokei = int(form.cleaned_data.get('keikakuTanka'))*int(form.cleaned_data.get('keikakuSuu'))
+                # if (form.cleaned_data.get('mitsumoriTanka')!=0 or form.cleaned_data.get('mitsumoriTanka') is not None)and (form.cleaned_data.get('mitsumoriSuu')!=0 or form.cleaned_data.get('mitsumoriSuu')is not None):
+                if form.cleaned_data.get('mitsumoriTanka') is not None and form.cleaned_data.get('mitsumoriSuu')is not None:
+                    mitsumorigokei = int(form.cleaned_data.get('mitsumoriTanka'))*int(form.cleaned_data.get('mitsumoriSuu'))
+                if form.cleaned_data.get('ringiTanka') is not None and  form.cleaned_data.get('ringiSuu')is not None:                   
+                    ringigokei = int(form.cleaned_data.get('ringiTanka'))*int(form.cleaned_data.get('ringiSuu'))
+                if form.cleaned_data.get('chumonTanka')is not None and form.cleaned_data.get('chumonSuu')is not None:
+                    chumongokei = int(form.cleaned_data.get('chumonTanka'))*int(form.cleaned_data.get('chumonSuu'))
+                if form.cleaned_data.get('nohinTanka')is not None and form.cleaned_data.get('nohinSuu')is not None:
+                    nohingokei = int(form.cleaned_data.get('nohinTanka'))*int(form.cleaned_data.get('nohinSuu'))
+                if form.cleaned_data.get('shiharaiTanka')is not None and form.cleaned_data.get('konyuSuu')is not None:
+                    konyugokei = int(form.cleaned_data.get('shiharaiTanka'))*int(form.cleaned_data.get('konyuSuu'))
+
                 kanriNo=form.cleaned_data.get('kanriNo')
                 edaban=form.cleaned_data.get('edaban')
                 hyojijuns =form.cleaned_data.get('hyojijun')
@@ -719,17 +774,18 @@ def edit3(request):
                         torihikisakiCode=form.cleaned_data.get('torihikisakiCode'),
                         # torihikisakiMei=form.cleaned_data.get('torihikisakiMei'),
                         torihikisakiMei=torihikisaki,
-                        kanjokamoku=form.cleaned_data.get('kanjokamoku'),
+                        kanjokamokuCode=form.cleaned_data.get('kanjokamokuCode'),
+                        kanjokamoku=kanjokamoku,
                         keikakuTanka=form.cleaned_data.get('keikakuTanka'),
                         keikakuSuu=form.cleaned_data.get('keikakuSuu'),
-                        keikakuGokei=form.cleaned_data.get('keikakuGokei'),
+                        keikakuGokei=keikakugokei,
                         mitsumoriTanka=form.cleaned_data.get('mitsumoriTanka'),
                         mitsumoriSuu=form.cleaned_data.get('mitsumoriSuu'),
-                        mitsumoriGokei=form.cleaned_data.get('mitsumoriGokei'),
+                        mitsumoriGokei=mitsumorigokei,
                         mitsumoriLink=form.cleaned_data.get('mitsumoriLink'),
                         ringiTanka=form.cleaned_data.get('ringiTanka'),
                         ringiSuu=form.cleaned_data.get('ringiSuu'),
-                        ringiGokei=form.cleaned_data.get('ringiGokei'),
+                        ringiGokei=ringigokei,
                         ringishoNo=form.cleaned_data.get('ringishoNo'),
                         ringishoLink=form.cleaned_data.get('ringishoLink'),
                         wfNo=form.cleaned_data.get('wfNo'),
@@ -740,18 +796,17 @@ def edit3(request):
                         onatsuRingiLink=form.cleaned_data.get('onatsuRingiLink'),
                         chumonTanka=form.cleaned_data.get('chumonTanka'),
                         chumonSuu=form.cleaned_data.get('chumonSuu'),
-                        chumonGokei=form.cleaned_data.get('chumonGokei'),
+                        chumonGokei=chumongokei,
                         chumonLink=form.cleaned_data.get('chumonLink'),
                         nohinKigen=form.cleaned_data.get('nohinKigen'),
-                        kenshuKigen=form.cleaned_data.get('kenshuKigen'),
                         shiharaiKigen=form.cleaned_data.get('shiharaiKigen'),
                         nohinTanka=form.cleaned_data.get('nohinTanka'),
                         nohinSuu=form.cleaned_data.get('nohinSuu'),
-                        nohinGokei=form.cleaned_data.get('nohinGokei'),
+                        nohinGokei=nohingokei,
                         nohinLink=form.cleaned_data.get('nohinLink'),
                         shiharaiTanka=form.cleaned_data.get('shiharaiTanka'),
                         konyuSuu=form.cleaned_data.get('konyuSuu'),
-                        konyuGokei=form.cleaned_data.get('konyuGokei'),
+                        konyuGokei=konyugokei,
                         seikyushoLink=form.cleaned_data.get('seikyushoLink'),
                         keikaku_Jisseki=form.cleaned_data.get('keikaku_Jisseki'),
                         kurikaeshiKigen=form.cleaned_data.get('kurikaeshiKigen'),

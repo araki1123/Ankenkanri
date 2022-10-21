@@ -7,12 +7,12 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE','first_project.settings')
 from django import setup
 setup()
 
-from first_app.models import AnkenTantosha
+from first_app.models import AnkenKanjokamoku
 # AnkenList.objects.create(
-a = AnkenTantosha(
+a = AnkenKanjokamoku(
     
-    ankenTantoshaCode = 00000,
-    ankenTantoshaMei = ''
+    ankenKanjokamokuCode = 10000,
+    ankenKanjokamoku = ''
     
 )
 

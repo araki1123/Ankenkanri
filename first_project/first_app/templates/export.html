@@ -23,8 +23,9 @@
         
         
         
-        <p>エクスポート先のファイルを選択して下さい</p>
-        <form  action = "{% url 'first_app:export2'%}" method="POST">
+        <p>デスクトップ直下にエクスポート先ファイルを作成して下さい</p>
+        <p>エクスポート先ファイルを選択して下さい</p>
+        <form  action = "{% url 'first_app:export2'%}" method="POST" >
             {% csrf_token %}
                 
         <input id="myfile" name="inputFile" type="file" accept=".xlsx" required>
@@ -156,6 +157,7 @@
             </div>
             <input type = "hidden" id = "kazu" name="kazu" value= {{kazu}}>
             <script>
+
                 for (let i=1; i < document.getElementById('kazu').value+1; i++) {
                     
                     let dateHyoji = document.getElementById('shiharaiKigen'+i).innerHTML;

@@ -14,3 +14,5 @@ admin.site.register(AnkenShiharaiPattern)
 admin.site.register(AnkenTorihikisaki)
 admin.site.register(AnkenTantosha)
 admin.site.register(AnkenKanjokamoku)
+
+
