@@ -8,8 +8,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>案件管理システム</title>
         <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
-        {% comment %} <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> {% endcomment %}
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        {% comment %} <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> {% endcomment %}
     </head>
     <div class="card bg-light mb-3" style="max-width: 950pt;">
 
@@ -128,7 +128,7 @@
                     <td class = "fix" ><input type="checkbox" name = "henko" value = {{anken.id}} onclick="chbx(this)" id =cbx2{{anken.id}}></th>
                     <td class = "fix" ><input type="checkbox" name = "hukusha" value = {{anken.id}} onclick="chbx(this)" id =cbx3{{anken.id}}></th>
                     <td class = "fixed2" ><input type="checkbox" name = "sakujo" value = {{anken.id}} onclick="chbx(this)" id =cbx4{{anken.id}}></th>
-                        <th nowrat id =id{{anken.hyojijun}} style="text-align: center;">{{anken.id | default:"－" }}</th>
+                        {% comment %} <th nowrat id =id{{anken.hyojijun}} style="text-align: center;">{{anken.id | default:"－" }}</th>
                         <td nowrat id =keiriShonin{{anken.hyojijun}} style="text-align: center;">{{anken.keiriShonin | default:"－" }}</td>
                         <td nowrat id =statusCode{{anken.hyojijun}} style="text-align: center;">{{anken.statusCode | default:"－" }}</td>
                         <td nowrat id =status{{anken.hyojijun}} style="text-align: center;">{{anken.status | default:"－" }}</td>
@@ -181,8 +181,66 @@
                         <td nowrat id =shainNo{{anken.hyojijun}} style="text-align: center;">{{anken.shainNo | default:"－" }}</td>
                         <td nowrat id =tantosha{{anken.hyojijun}} style="text-align: center;">{{anken.tantosha | default:"－" }}</td>
                         <td nowrat id =comment{{anken.hyojijun}} style="text-align: center;">{{anken.comment | default:"－" }}</td>
-                        <td nowrat id =hyojijun{{anken.hyojijun}} style="text-align: center;">{{anken.hyojijun | default:"－" }}</td>
-                                     
+                        <td nowrat id =hyojijun{{anken.hyojijun}} style="text-align: center;">{{anken.hyojijun | default:"－" }}</td> {% endcomment %}
+
+                        <th nowrat id =id{{forloop.counter}} style="text-align: center;">{{anken.id | default:"－" }}</th>
+                        <td nowrat id =keiriShonin{{forloop.counter}} style="text-align: center;">{{anken.keiriShonin | default:"－" }}</td>
+                        <td nowrat id =statusCode{{forloop.counter}} style="text-align: center;">{{anken.statusCode | default:"－" }}</td>
+                        <td nowrat id =status{{forloop.counter}} style="text-align: center;">{{anken.status | default:"－" }}</td>
+                        <td nowrat id =edabanGroup{{forloop.counter}} style="text-align: center;">{{anken.edabanGroup | default:"－"  | default:"－" }}</td>
+                        <td nowrat id =shiharaiPattern{{forloop.counter}} style="text-align: center;">{{anken.shiharaiPattern | default:"－" }}</td>
+                        <td nowrat id =kanriNo{{forloop.counter}} style="text-align: center;">{{anken.kanriNo | default:"－" }}</td>
+                        <td nowrat id =edaban{{forloop.counter}} style="text-align: center;">{{anken.edaban | default:"－" }}</td>
+                        <td nowrat id =ankenMei{{forloop.counter}} style="text-align: center;">{{anken.ankenMei | default:"－" }}</td>
+                        <td nowrat id =torihikisakiCode{{forloop.counter}} style="text-align: center;">{{anken.torihikisakiCode | default:"－" }}</td>
+                        <td nowrat id =torihikisakiMei{{forloop.counter}} style="text-align: center;">{{anken.torihikisakiMei | default:"－" }}</td>
+                        <td nowrat id =kanjokamokuCode{{forloop.counter}} style="text-align: center;">{{anken.kanjokamokuCode | default:"－" }}</td>
+                        <td nowrat id =kanjokamoku{{forloop.counter}} style="text-align: center;">{{anken.kanjokamoku | default:"－" }}</td>
+                        <td nowrat id =keikakuTanka{{forloop.counter}} style="text-align: right;">{{anken.keikakuTanka |default:"－" | intcomma:False }}</td>
+                        <td nowrat id =keikakuSuu{{forloop.counter}} style="text-align: right;">{{anken.keikakuSuu |default:"－" | intcomma:False  }}</td>
+                        <td nowrat id =keikakuGokei{{forloop.counter}} style="text-align: right;">{{anken.keikakuGokei |default:"－" | intcomma:False  }}</td>
+                        <td nowrat id =mitsumoriTanka{{forloop.counter}} style="text-align: right;">{{anken.mitsumoriTanka|default:"－" | intcomma:False  }}</td>
+                        <td nowrat id =mitsumoriSuu{{forloop.counter}} style="text-align: right;">{{anken.mitsumoriSuu|default:"－" | intcomma:False  }}</td>
+                        <td nowrat id =mitsumoriGokei{{forloop.counter}} style="text-align: right;">{{anken.mitsumoriGokei|default:"－" | intcomma:False  }}</td>
+                        <td nowrat id =mitsumoriLink{{forloop.counter}} style="text-align: center;">{{anken.mitsumoriLink | default:"－" }}</td>
+                        <td nowrat id =ringiTanka{{forloop.counter}} style="text-align: right;">{{anken.ringiTanka|default:"－" | intcomma:False  }}</td>
+                        <td nowrat id =ringiSuu{{forloop.counter}} style="text-align: right;">{{anken.ringiSuu|default:"－" | intcomma:False  }}</td>
+                        <td nowrat id =ringiGokei{{forloop.counter}} style="text-align: right;">{{anken.ringiGokei|default:"－" | intcomma:False  }}</td>
+                        <td nowrat id =ringishoNo{{forloop.counter}} style="text-align: center;">{{anken.ringishoNo | default:"－" }}</td>
+                        <td nowrat id =ringishoLink{{forloop.counter}} style="text-align: center;">{{anken.ringishoLink | default:"－" }}</td>
+                        <td nowrat id =wfNo{{forloop.counter}} style="text-align: center;">{{anken.wfNo | default:"－" }}</td>
+                        <td nowrat id =keiyakuKingaku{{forloop.counter}} style="text-align: right;">{{anken.keiyakuKingaku|default:"－" | intcomma:False  }}</td>
+                        <td nowrat id =keiyakushoNo{{forloop.counter}} style="text-align: center;">{{anken.keiyakushoNo | default:"－" }}</td>
+                        <td nowrat id =keiyakushoLink{{forloop.counter}} style="text-align: center;">{{anken.keiyakushoLink | default:"－" }}</td>
+                        <td nowrat id =onatsuRingiNo{{forloop.counter}} style="text-align: center;">{{anken.onatsuRingiNo | default:"－" }}</td>
+                        <td nowrat id =onatsuRingiLink{{forloop.counter}} style="text-align: center;">{{anken.onatsuRingiLink | default:"－" }}</td>
+                        <td nowrat id =chumonTanka{{forloop.counter}} style="text-align: right;">{{anken.chumonTanka|default:"－" | intcomma:False  }}</td>
+                        <td nowrat id =chumonSuu{{forloop.counter}} style="text-align: right;">{{anken.chumonSuu|default:"－" | intcomma:False  }}</td>
+                        <td nowrat id =chumonGokei{{forloop.counter}} style="text-align: right;">{{anken.chumonGokei|default:"－" | intcomma:False  }}</td>
+                        <td nowrat id =chumonLink{{forloop.counter}} style="text-align: center;">{{anken.chumonLink | default:"－" }}</td>
+                        <td nowrat id =nohinKigen{{forloop.counter}} style="text-align: center;">{{anken.nohinKigen | default:"－" }}</td>
+                        <td nowrat id =shiharaiKigen{{forloop.counter}} style="text-align: center;">{{anken.shiharaiKigen | default:"－" }}</td>
+                        <td nowrat id =nohinTanka{{forloop.counter}} style="text-align: right;">{{anken.nohinTanka|default:"－" | intcomma:False  }}</td>
+                        <td nowrat id =nohinSuu{{forloop.counter}} style="text-align: right;">{{anken.nohinSuu|default:"－" | intcomma:False  }}</td>
+                        <td nowrat id =nohinGokei{{forloop.counter}} style="text-align: right;">{{anken.nohinGokei|default:"－" | intcomma:False  }}</td>
+                        <td nowrat id =nohinLink{{forloop.counter}} style="text-align: center;">{{anken.nohinLink | default:"－" }}</td>
+                        <td nowrat id =shiharaiTanka{{forloop.counter}} style="text-align: right;">{{anken.shiharaiTanka|default:"－" | intcomma:False  }}</td>
+                        <td nowrat id =konyuSuu{{forloop.counter}} style="text-align: right;">{{anken.konyuSuu|default:"－" | intcomma:False  }}</td>
+                        <td nowrat id =konyuGokei{{forloop.counter}} style="text-align: right;">{{anken.konyuGokei|default:"－" | intcomma:False  }}</td>
+                        <td nowrat id =seikyushoLink{{forloop.counter}} style="text-align: center;">{{anken.seikyushoLink | default:"－" }}</td>
+                        <td nowrat id =keikaku_Jisseki{{forloop.counter}} style="text-align: right;">{{anken.keikaku_Jisseki|default:"－" | intcomma:False  }}</td>
+                        <td nowrat id =kurikaeshiKigen{{forloop.counter}} style="text-align: center;">{{anken.kurikaeshiKigen | default:"－" }}</td>
+                        <td nowrat id =konyuKaisha{{forloop.counter}} style="text-align: center;">{{anken.konyuKaisha | default:"－" }}</td>
+                        <td nowrat id =dataKoshinbi{{forloop.counter}} style="text-align: center;">{{anken.dataKoshinbi | default:"－" }}</td>
+                        <td nowrat id =saishuKoshinsha{{forloop.counter}} style="text-align: center;">{{anken.saishuKoshinsha | default:"－" }}</td>
+                        <td nowrat id =shainNo{{forloop.counter}} style="text-align: center;">{{anken.shainNo | default:"－" }}</td>
+                        <td nowrat id =tantosha{{forloop.counter}} style="text-align: center;">{{anken.tantosha | default:"－" }}</td>
+                        <td nowrat id =comment{{forloop.counter}} style="text-align: center;">{{anken.comment | default:"－" }}</td>
+                        <td nowrat id =hyojijun{{forloop.counter}} style="text-align: center;">{{anken.hyojijun | default:"－" }}</td>
+
+
+
+
                 </tr>
                 {% endfor %}
                 <input type = "hidden" id = "kazu" name="kazu" value= {{kazu}}>
@@ -459,7 +517,7 @@
                             
                         }
         
-                        else if (document.getElementById("statusCode"+i).innerHTML != 99){
+                        else if (document.getElementById("statusCode"+i).innerHTML != 99||document.getElementById("edaban"+i).innerHTML != 0){
                             document.getElementById("keiriShonin"+i).style.backgroundColor = 'aqua';
                             document.getElementById("statusCode"+i).style.backgroundColor = 'aqua';
                             document.getElementById("status"+i).style.backgroundColor = 'aqua';
@@ -515,7 +573,7 @@
                             document.getElementById("hyojijun"+i).style.backgroundColor = 'aqua'; 
                         }
                     }
-                    </script> 
+                </script> 
             </div>
         </table>
     
