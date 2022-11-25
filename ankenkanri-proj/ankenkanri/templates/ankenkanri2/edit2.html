@@ -61,15 +61,14 @@
         
         <tr>
 
-            {% comment %} <th norat>id</th> {% endcomment %}
-            <th norat>経理承認</th>
-            <th norat>ステータスコード</th>
-            {% comment %} <th norat>案件ステータス</th> {% endcomment %}
-            <th norat>枝番グループ</th>
-            <th norat>支払パターン</th>
             <th norat>管理No.</th>
             <th norat>枝番</th>
+            <th norat>枝番グループ</th>
             <th norat>案件名</th>
+            <th norat>経理承認</th>
+            <th norat>支払パターン</th>
+            <th norat>ステータスコード</th>
+            {% comment %} <th norat>案件ステータス</th> {% endcomment %}
             <th norat>取引先コード</th>
             {% comment %} <th norat>取引先名</th> {% endcomment %}
             <th norat>勘定科目コード</th>
@@ -78,6 +77,7 @@
             <th norat>計画数</th>
             {% comment %} <th norat>計画合計金額</th> {% endcomment %}
             <th norat>見積単価</th>
+            <th norat>支払日期限</th>
             <th norat>見積数</th>
             {% comment %} <th norat>見積合計金額</th> {% endcomment %}
             <th norat>見積書リンク</th>
@@ -96,12 +96,11 @@
             <th norat>注文数</th>
             {% comment %} <th norat>注文合計金額</th> {% endcomment %}
             <th norat>注文書リンク</th>
-            <th norat>納品日期限</th>
-            <th norat>支払日期限</th>
             <th norat>納品単価</th>
             <th norat>納品数</th>
             {% comment %} <th norat>納品合計金額</th> {% endcomment %}
             <th norat>納品書リンク</th>
+            <th norat>納品日期限</th>
             <th norat>支払単価</th>
             <th norat>購入数</th>
             {% comment %} <th norat>購入合計金額</th> {% endcomment %}
@@ -115,65 +114,66 @@
             {% comment %} <th norat>担当者名</th> {% endcomment %}
             <th norat>コメント</th>
             <th norat>表示順</th>
+            
         </tr>
         <tr>
 
 
 
-            {% comment %} <th norat>{{form.id}}</th> {% endcomment %}
-            <td norat >{{form.keiriShonin}}</td>
-            <td norat >{{form.statusCode}}</td>
-            {% comment %} <td norat>{{form.status}}</td> {% endcomment %}
-            <td norat>{{form.edabanGroup}}</td>
-            <td norat>{{form.shiharaiPattern}}</td>
             <td norat name="kanriNo" value={{form.kanriNo}} {{form.kanriNo}}</td>
-            <td norat name="edaban" value={{form.edaban}} {{form.edaban}}</td>
-            <td norat>{{form.ankenMei}}</td>
-            <td norat>{{form.torihikisakiCode}}</td>
-            {% comment %} <td norat>{{form.torihikisakiMei}}</td> {% endcomment %}
-            <td norat>{{form.kanjokamokuCode}}</td>
-            {% comment %} <td norat>{{form.kanjokamoku}}</td> {% endcomment %}
-            <td norat>{{form.keikakuTanka}}</td>
-            <td norat>{{form.keikakuSuu}}</td>
-            {% comment %} <td norat>{{form.keikakuGokei}}</td> {% endcomment %}
-            <td norat>{{form.mitsumoriTanka}}</td>
-            <td norat>{{form.mitsumoriSuu}}</td>
-            {% comment %} <td norat>{{form.mitsumoriGokei}}</td> {% endcomment %}
-            <td norat>{{form.mitsumoriLink}}</td>
-            <td norat>{{form.ringiTanka}}</td>
-            <td norat>{{form.ringiSuu}}</td>
-            {% comment %} <td norat>{{form.ringiGokei}}</td> {% endcomment %}
-            <td norat>{{form.ringishoNo}}</td>
-            <td norat>{{form.ringishoLink}}</td>
-            <td norat>{{form.wfNo}}</td>
-            <td norat>{{form.keiyakuKingaku}}</td>
-            <td norat>{{form.keiyakushoNo}}</td>
-            <td norat>{{form.keiyakushoLink}}</td>
-            <td norat>{{form.onatsuRingiNo}}</td>
-            <td norat>{{form.onatsuRingiLink}}</td>
-            <td norat>{{form.chumonTanka}}</td>
-            <td norat>{{form.chumonSuu}}</td>
-            {% comment %} <td norat>{{form.chumonGokei}}</td> {% endcomment %}
-            <td norat>{{form.chumonLink}}</td>
-            <td norat>{{form.nohinKigen}}</td>
-            <td norat>{{form.shiharaiKigen}}</td>
-            <td norat>{{form.nohinTanka}}</td>
-            <td norat>{{form.nohinSuu}}</td>
-            {% comment %} <td norat>{{form.nohinGokei}}</td> {% endcomment %}
-            <td norat>{{form.nohinLink}}</td>
-            <td norat>{{form.shiharaiTanka}}</td>
-            <td norat>{{form.konyuSuu}}</td>
-            {% comment %} <td norat>{{form.konyuGokei}}</td> {% endcomment %}
-            <td norat>{{form.seikyushoLink}}</td>
-            {% comment %} <td norat>{{form.keikaku_Jisseki}}</td> {% endcomment %}
-            <td norat>{{form.kurikaeshiKigen}}</td>
-            <td norat>{{form.konyuKaisha}}</td>
-            {% comment %} <td norat>{{form.dataKoshinbi}}</td> {% endcomment %}
-            {% comment %} <td norat>{{form.saishuKoshinsha}}</td> {% endcomment %}
-            <td norat>{{form.shainNo}}</td>
-            {% comment %} <td norat>{{form.tantosha}}</td> {% endcomment %}
-            <td norat>{{form.comment}}</td>
-            <td norat>{{form.hyojijun}}</td>
+                <td norat name="edaban" value={{form.edaban}} {{form.edaban}}</td>
+                <td norat>{{form.edabanGroup}}</td>
+                <td norat>{{form.ankenMei}}</td>
+                <td norat >{{form.keiriShonin}}</td>
+                <td norat>{{form.shiharaiPattern}}</td>
+                <td norat >{{form.statusCode}}</td>
+                {% comment %} <td norat>{{form.status}}</td> {% endcomment %}
+                <td norat>{{form.torihikisakiCode}}</td>
+                {% comment %} <td norat>{{form.torihikisakiMei}}</td> {% endcomment %}
+                <td norat>{{form.kanjokamokuCode}}</td>
+                {% comment %} <td norat>{{form.kanjokamoku}}</td> {% endcomment %}
+                <td norat>{{form.keikakuTanka}}</td>
+                <td norat>{{form.keikakuSuu}}</td>
+                {% comment %} <td norat>{{form.keikakuGokei}}</td> {% endcomment %}
+                <td norat>{{form.mitsumoriTanka}}</td>
+                <td norat>{{form.shiharaiKigen}}</td>
+                <td norat>{{form.mitsumoriSuu}}</td>
+                {% comment %} <td norat>{{form.mitsumoriGokei}}</td> {% endcomment %}
+                <td norat>{{form.mitsumoriLink}}</td>
+                <td norat>{{form.ringiTanka}}</td>
+                <td norat>{{form.ringiSuu}}</td>
+                {% comment %} <td norat>{{form.ringiGokei}}</td> {% endcomment %}
+                <td norat>{{form.ringishoNo}}</td>
+                <td norat>{{form.ringishoLink}}</td>
+                <td norat>{{form.wfNo}}</td>
+                <td norat>{{form.keiyakuKingaku}}</td>
+                <td norat>{{form.keiyakushoNo}}</td>
+                <td norat>{{form.keiyakushoLink}}</td>
+                <td norat>{{form.onatsuRingiNo}}</td>
+                <td norat>{{form.onatsuRingiLink}}</td>
+                <td norat>{{form.chumonTanka}}</td>
+                <td norat>{{form.chumonSuu}}</td>
+                {% comment %} <td norat>{{form.chumonGokei}}</td> {% endcomment %}
+                <td norat>{{form.chumonLink}}</td>
+                <td norat>{{form.nohinTanka}}</td>
+                <td norat>{{form.nohinSuu}}</td>
+                {% comment %} <td norat>{{form.nohinGokei}}</td> {% endcomment %}
+                <td norat>{{form.nohinLink}}</td>
+                <td norat>{{form.nohinKigen}}</td>
+                <td norat>{{form.shiharaiTanka}}</td>
+                <td norat>{{form.konyuSuu}}</td>
+                {% comment %} <td norat>{{form.konyuGokei}}</td> {% endcomment %}
+                <td norat>{{form.seikyushoLink}}</td>
+                {% comment %} <td norat>{{form.keikaku_Jisseki}}</td> {% endcomment %}
+                <td norat>{{form.kurikaeshiKigen}}</td>
+                <td norat>{{form.konyuKaisha}}</td>
+                {% comment %} <td norat>{{form.dataKoshinbi}}</td> {% endcomment %}
+                {% comment %} <td norat>{{form.saishuKoshinsha}}</td> {% endcomment %}
+                <td norat>{{form.shainNo}}</td>
+                {% comment %} <td norat>{{form.tantosha}}</td> {% endcomment %}
+                <td norat>{{form.comment}}</td>
+                <td norat>{{form.hyojijun}}</td>
+                
             
             
         </tr>
@@ -182,60 +182,60 @@
 
 
 
-            {% comment %} <th norat>{{form.id}}</th> {% endcomment %}
-            <td norat >※必須項目</td>
-            <td norat >※必須項目</td>
-            {% comment %} <td norat>{{form.status}}</td> {% endcomment %}
-            <td norat>※必須項目</td>
-            <td norat>※必須項目</td>
             <td norat name="kanriNo" value={{form.kanriNo}} ※必須項目</td>
-            <td norat name="edaban" value={{form.edaban}} ※必須項目</td>
-            <td norat>※必須項目</td>
-            <td norat>※必須項目</td>
-            {% comment %} <td norat>{{form.torihikisakiMei}}</td> {% endcomment %}
-            <td norat>※必須項目</td>
-            {% comment %} <td norat>{{form.kanjokamoku}}</td> {% endcomment %}
-            <td norat>※必須項目</td>
-            <td norat>※必須項目</td>
-            {% comment %} <td norat>{{form.keikakuGokei}}</td> {% endcomment %}
-            <td norat></td>
-            <td norat></td>
-            {% comment %} <td norat>{{form.mitsumoriGokei}}</td> {% endcomment %}
-            <td norat></td>
-            <td norat></td>
-            <td norat></td>
-            {% comment %} <td norat>{{form.ringiGokei}}</td> {% endcomment %}
-            <td norat></td>
-            <td norat></td>
-            <td norat></td>
-            <td norat></td>
-            <td norat></td>
-            <td norat></td>
-            <td norat></td>
-            <td norat></td>
-            <td norat></td>
-            <td norat></td>
-            {% comment %} <td norat>{{form.chumonGokei}}</td> {% endcomment %}
-            <td norat></td>
-            <td norat></td>
-            <td norat></td>
-            <td norat></td>
-            <td norat></td>
-            {% comment %} <td norat>{{form.nohinGokei}}</td> {% endcomment %}
-            <td norat></td>
-            <td norat></td>
-            <td norat></td>
-            {% comment %} <td norat>{{form.konyuGokei}}</td> {% endcomment %}
-            <td norat></td>
-            {% comment %} <td norat>{{form.keikaku_Jisseki}}</td> {% endcomment %}
-            <td norat></td>
-            <td norat></td>
-            {% comment %} <td norat>{{form.dataKoshinbi}}</td> {% endcomment %}
-            {% comment %} <td norat>{{form.saishuKoshinsha}}</td> {% endcomment %}
-            <td norat>※必須項目</td>
-            {% comment %} <td norat>{{form.tantosha}}</td> {% endcomment %}
-            <td norat></td>
-            <td norat></td>
+                <td norat name="edaban" value={{form.edaban}} ※必須項目</td>
+                <td norat>※必須項目</td>
+                <td norat>※必須項目</td>
+                <td norat >※必須項目</td>
+                <td norat>※必須項目</td>
+                <td norat >※必須項目</td>
+                {% comment %} <td norat>{{form.status}}</td> {% endcomment %}
+                <td norat>※必須項目</td>
+                {% comment %} <td norat>{{form.torihikisakiMei}}</td> {% endcomment %}
+                <td norat>※必須項目</td>
+                {% comment %} <td norat>{{form.kanjokamoku}}</td> {% endcomment %}
+                <td norat>※必須項目</td>
+                <td norat>※必須項目</td>
+                {% comment %} <td norat>{{form.keikakuGokei}}</td> {% endcomment %}
+                <td norat></td>
+                <td norat></td>
+                <td norat></td>
+                {% comment %} <td norat>{{form.mitsumoriGokei}}</td> {% endcomment %}
+                <td norat></td>
+                <td norat></td>
+                <td norat></td>
+                {% comment %} <td norat>{{form.ringiGokei}}</td> {% endcomment %}
+                <td norat></td>
+                <td norat></td>
+                <td norat></td>
+                <td norat></td>
+                <td norat></td>
+                <td norat></td>
+                <td norat></td>
+                <td norat></td>
+                <td norat></td>
+                <td norat></td>
+                {% comment %} <td norat>{{form.chumonGokei}}</td> {% endcomment %}
+                <td norat></td>
+                <td norat></td>
+                <td norat></td>
+                {% comment %} <td norat>{{form.nohinGokei}}</td> {% endcomment %}
+                <td norat></td>
+                <td norat></td>
+                <td norat></td>
+                <td norat></td>
+                {% comment %} <td norat>{{form.konyuGokei}}</td> {% endcomment %}
+                <td norat></td>
+                {% comment %} <td norat>{{form.keikaku_Jisseki}}</td> {% endcomment %}
+                <td norat></td>
+                <td norat></td>
+                {% comment %} <td norat>{{form.dataKoshinbi}}</td> {% endcomment %}
+                {% comment %} <td norat>{{form.saishuKoshinsha}}</td> {% endcomment %}
+                <td norat>※必須項目</td>
+                {% comment %} <td norat>{{form.tantosha}}</td> {% endcomment %}
+                <td norat></td>
+                <td norat></td>
+                
             
             
         </tr>

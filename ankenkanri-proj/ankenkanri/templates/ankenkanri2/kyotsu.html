@@ -64,7 +64,7 @@
             {% for anken in ankenList %}
         <div >
         <tr >
-            <td nowrap id =kanriNo{{forloop.counter}} style="text-align: center;">{{anken.kanriNo | default:"－" }}</td>
+            <th nowrap id =kanriNo{{forloop.counter}} style="text-align: center;">{{anken.kanriNo | default:"－" }}</th>
             <td nowrap id =edaban{{forloop.counter}} style="text-align: center;">{{anken.edaban | default:"－" }}</td>
             <td nowrap id =edabanGroup{{forloop.counter}} style="text-align: center;">{{anken.edabanGroup | default:"－"  | default:"－" }}</td>
             <td nowrap id =ankenMei{{forloop.counter}} style="text-align: center;">{{anken.ankenMei | default:"－" }}</td>
