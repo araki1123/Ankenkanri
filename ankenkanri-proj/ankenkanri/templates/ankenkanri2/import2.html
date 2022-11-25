@@ -13,15 +13,16 @@
 
 
     </head>
-    <div class="card bg-light mb-3" style="max-width: 950pt;">
-        {% if  message %}
+
+    <div class="card bg-light mb-3" style="max-width: 950pt; margin-left: 10px; margin-top: 10px;">
+           {% if  message %}
         <div class="card-header"><div class="p-3 mb-2 bg-info text-white"><h3>データインポート　エラー</h3>
         {%else%}
         <div class="card-header"><div class="p-3 mb-2 bg-info text-white"><h3>データインポート　完了</h3>
         {%endif%}
         </div>
     </div>
-</div>
+
 <div class="commentandbutton">
         
         {% if not message %}

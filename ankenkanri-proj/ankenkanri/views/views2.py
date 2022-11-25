@@ -110,14 +110,14 @@ def warningCheck(request, ankenList):
     ON = True
     OFF = False
     messageFlag = []
-    # today = date.today()
-    today = timezone.now()
+    today = date.today()
+    # today = timezone.now()
 
     for row in ankenList:
         #a = row.shiharaiKigen
         #b = timedelta(days=WARNING_MSG_DAYS)
         #c = row.shiharaiKigen - timedelta(days=WARNING_MSG_DAYS)   ## !! for debug
-        if row.shiharaiKigen == None:
+        if (row.shiharaiKigen == None) or (row.shiharaiKigen == ''):  ## 支払期限未設定の場合はOFF
             messageFlag.append(OFF)
         elif today >= (row.shiharaiKigen - timedelta(days=WARNING_MSG_DAYS)):
             messageFlag.append(ON)
@@ -133,6 +133,12 @@ def sameRecordCheck(insertRow, ankenList):
         if (insertRow[0].kanriNo == row.kanriNo) and (nextEdaban == row.edaban):
             return "Exist"
     return "None"
+
+## 日付データに時刻（00:00:00）データを付加する
+def addTimeData(newKigen):
+    newKigenStr = newKigen.strftime('%Y-%m-%d') + ' ' + '12:00:00'
+    newKigenDate = datetime.strptime(newKigenStr, '%Y-%m-%d %H:%M:%S')
+    return newKigenDate
 
 ## 全レコードに対して枝番自動生成の条件をチェックして、枝番を生成する。
 def edabanCreateCheck(request):
@@ -152,7 +158,7 @@ def edabanCreateCheck(request):
     ## edaban0Listの全idに対して、夫々、edaban値最大レコード >> edabanMaxIdList
     edabanMaxIdList = list(edaban0List)  ## edabanMaxIdListを新規に作る
 
-    baseAnkenMeiList = []
+    baseAnkenMeiList = []  ## edaban=0毎の案件名を格納するリストを初期化
     i = 0
     for row1 in edaban0List:
         #print('■i =', i)
@@ -168,12 +174,12 @@ def edabanCreateCheck(request):
                 pass                          ## edaban0Listと同じkanriNoレコードを探す
 
             elif int(AnkenList.objects.filter(id=edabanMaxIdList[i])[0].edaban) >= int(row2.edaban): ## edabanMaxIdListとankenListのedabanを比較
-                #print('(edaban0Record)id =',  row1)        
+                #print('(edaban0Record)id =',  row1)        ## 既にedabanMaxIdListに登録されているedabanが大きければスキップ
                 #print('ankenList(all)id =', row2.edaban) 
                 #print('L137 current edaban greater!')
                 pass
             else:
-                edabanMaxIdList[i] = row2.id
+                edabanMaxIdList[i] = row2.id    ## 登録されているedabanMaxIdListより大きな値のedabanの場合には、そのidをedabanMaxIdListへ登録
                 #print('edabanMaxIdList =', edabanMaxIdList)
         i = i + 1
     print('baseAnkenMeiList =', baseAnkenMeiList)
@@ -181,6 +187,7 @@ def edabanCreateCheck(request):
     referIdList = edabanMaxIdList
 
     ## 支払期限前ワーニングメッセージ表示
+    ## WARNING_MESSAGE_DAYS=14、支払期限の14日以内の場合request.session['sessionMessageFlag']にフラグをセットする
 
     warningCheck(request, ankenList)
 
@@ -188,12 +195,18 @@ def edabanCreateCheck(request):
 
     MARGIN_MONTHS = 3
     i = 0
-    today = timezone.now() 
+    #today = timezone.now() 
+    today = date.today()
     dt = today + relativedelta(months=1) - timedelta(days=today.day)
     for referId in referIdList:
         insertRow = AnkenList.objects.filter(id=referId)
         print('insertRow =', insertRow)
         sPattern = AnkenList.objects.filter(id=referId)[0].shiharaiPattern
+
+        ### 支払期限が設定されていない場合は自動生成、ワーニング表示をスキップ
+        if (insertRow[0].shiharaiKigen is None) or (insertRow[0].shiharaiKigen == ""):
+            pass
+            continue
         if sPattern == 2 or sPattern ==3:
             a = insertRow[0].shiharaiKigen
             b = relativedelta(months=1)   
@@ -226,19 +239,19 @@ def edabanCreateCheck(request):
 
                 ## 支払期限は参照する行の支払期限＋1か月（又は＋1年）
                 elif sPattern == 2 or sPattern ==3:
-                    newKigen = get_last_date(insertRow[0].shiharaiKigen + relativedelta(months=1))    
-                    #newKigen = insertRow[0].shiharaiKigen + relativedelta(months=1) 
-                    newKigenJST = newKigen.astimezone(JST)
-                    #insertAnkenMei = baseAnkenMeiList[i]
+                    newKigen = get_last_date(insertRow[0].shiharaiKigen + relativedelta(months=1)) 
+                    newKigenDate = addTimeData(newKigen)   ## 日付データに時刻データ（00H:00M:00S）を加える         
+                    newKigenJST = newKigenDate.astimezone(JST)  ###  UTC→JST時刻へ変換
+                    # insertAnkenMei = baseAnkenMeiList[i] + '(支払期限： ' \
+                    #         + str(newKigenJST) + ')'
                     insertAnkenMei = baseAnkenMeiList[i] + '(支払期限： ' \
-                            + str(newKigenJST) + ')'
+                            + newKigenJST.strftime('%Y-%m-%d') + ')'
                 else:
-                    newKigen = get_last_date(insertRow[0].shiharaiKigen + relativedelta(years=1))       
-                    #newKigen = insertRow[0].shiharaiKigen + relativedelta(years=1)
-                    #newKigenJST = newKigen.astimezone(JST)
-                    #insertAnkenMei = baseAnkenMeiList[i]      
+                    newKigen = get_last_date(insertRow[0].shiharaiKigen + relativedelta(years=1)) 
+                    newKigenDate = addTimeData(newKigen)   ## 日付データに時刻データ（00H:00M:00S）を加える      
+                    newKigenJST = newKigenDate.astimezone(JST)
                     insertAnkenMei = baseAnkenMeiList[i] + '(支払期限： ' \
-                            + str(newKigenJST) + ')'
+                            + newKigenJST.strftime('%Y-%m-%d') + ')'
 
                 ## 1行自動挿入                    
                 lenAnkenList = len(ankenList)

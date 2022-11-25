@@ -42,15 +42,20 @@
     <body>
         {% comment %} <div class="card-header"> {% endcomment %}
         {% comment %} <div class="p-3 mb-2 bg-info text-white"> {% endcomment %}
-        <form action="/ankenkanri2/edit3" method='POST' >
+        <div class="card bg-light mb-3" style="max-width: 950pt; margin-left: 10px; margin-top: 10px;">
 
+        <form action="/ankenkanri2/edit3" method='POST' >
+            <div style="margin: 15px 15px; ">
             <input type = "hidden" name="checkType" value= {{checkType}}>
             <a  class="btn btn-primary" href="index" type="submit" style="width:135pt;height:45pt;margin: 5px 5px;">TOPへ戻る</a>
 
             {% comment %} <input type = "submit" value = "確定" style="width:135pt;height:45pt;margin: 5px 5px;" class="btn btn-primary" href="{% url 'first_app:edit3'%}"> {% endcomment %}
             <input type = "submit" value = "確定" style="width:135pt;height:45pt;margin: 5px 5px;" class="btn btn-primary" href="ankenkanri2/edit3">
             {% csrf_token %}
-        <div style="height:290px; width:1280px; overflow:scroll" class="anken-table">
+        </div>
+    
+            
+            <div style="height:290px; width:1280px; overflow:scroll" class="anken-table">
         <table>    
         {% comment %} {{form.as_table}} {% endcomment %}
         
